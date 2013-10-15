@@ -487,6 +487,12 @@ else
     " NeoBundle自身をNeoBundleで管理させる
     NeoBundleFetch 'Shougo/neobundle.vim'
 
+    "タブで開けるように設定
+    if has('clientserver')
+	    NeoBundle 'thinca/vim-singleton'
+	    call singleton#enable()
+    endif
+
     " 非同期通信を可能にする
     " 'build'が指定されているのでインストール時に自動的に
     " 指定されたコマンドが実行され vimproc がコンパイルされる
@@ -506,7 +512,7 @@ else
 	    let g:acp_enableAtStartup = 0
 	    let g:neocomplete#enable_smart_case = 1
 	    " NeoCompleteを有効化
-	    NeoCompleteEnable
+	    "NeoCompleteEnable
     endfunction
     NeoBundleLazy 'Shougo/neosnippet.vim', {
 			    \ "autoload": {"insert": 1}}
@@ -639,9 +645,27 @@ else
 	    let g:jedi#goto_command = '<Leader>G'
     endfunction
 
-
-
-
+    "前回のセッション回復
+    NeoBundle 'xolox/vim-session', {
+			    \ 'depends' : 'xolox/vim-misc',
+			    \ }
+    " 現在のディレクトリ直下の .vimsessions/ を取得 
+    let s:local_session_directory = xolox#misc#path#merge(getcwd(), '.vimsessions')
+    " 存在すれば
+    if isdirectory(s:local_session_directory)
+	    " session保存ディレクトリをそのディレクトリの設定
+	    let g:session_directory = s:local_session_directory
+	    " vimを辞める時に自動保存
+	    let g:session_autosave = 'yes'
+	    " 引数なしでvimを起動した時にsession保存ディレクトリのdefault.vimを開く
+	    let g:session_autoload = 'yes'
+	    " 1分間に1回自動保存
+	    let g:session_autosave_periodic = 1
+    else
+	    let g:session_autosave = 'no'
+	    let g:session_autoload = 'no'
+    endif
+    unlet s:local_session_directory
 
 
 
