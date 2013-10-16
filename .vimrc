@@ -65,6 +65,9 @@ endif
 "----------------------------------------
 " 編集設定
 "----------------------------------------
+
+ 
+
 set shiftround          " '<'や'>'でインデントする際に'shiftwidth'の倍数に丸める
 set infercase           " 補完時に大文字小文字を区別しない
 set virtualedit=all     " カーソルを文字が存在しない部分でも動けるようにする
@@ -338,7 +341,11 @@ nnoremap <silent> [toggle]w :setl wrap!<CR>:setl wrap?<CR>
 set expandtab
 set tabstop=2
 set shiftwidth=2
-
+ 
+"折りたたみ方法をインデントに指定
+set foldmethod=indent
+set foldcolumn=3
+ 
 " make, grep などのコマンド後に自動的にQuickFixを開く
 autocmd MyAutoCmd QuickfixCmdPost make,grep,grepadd,vimgrep copen
 
