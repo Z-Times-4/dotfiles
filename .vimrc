@@ -161,6 +161,9 @@ cnoremap <expr> ? getcmdtype() == '?' ? '\?' : '?'
 " 表示設定
 "----------------------------------------
 
+set guioptions-=T
+set guioptions-=m
+
 " 前時代的スクリーンベルを無効化
 set t_vb=
 set novisualbell
@@ -709,7 +712,7 @@ else
       "デフォルトのカラースキーマ
       colorscheme jellybeans
 
-
+      NeoBundle 'kana/vim-tabpagecd'
 
 
     "NeoBundleここまで
