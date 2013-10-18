@@ -680,6 +680,37 @@ else
     unlet s:local_session_directory
 
 
+    "カラースキーマ定義
+      " solarized カラースキーム
+      NeoBundle 'altercation/vim-colors-solarized'
+      " mustang カラースキーム
+      NeoBundle 'croaker/mustang-vim'
+      " wombat カラースキーム
+      NeoBundle 'jeffreyiacono/vim-colors-wombat'
+      " jellybeans カラースキーム
+      NeoBundle 'nanotech/jellybeans.vim'
+      " lucius カラースキーム
+      NeoBundle 'vim-scripts/Lucius'
+      " zenburn カラースキーム
+      NeoBundle 'vim-scripts/Zenburn'
+      " mrkn256 カラースキーム
+      NeoBundle 'mrkn/mrkn256.vim'
+      " railscasts カラースキーム
+      NeoBundle 'jpo/vim-railscasts-theme'
+      " pyte カラースキーム
+      NeoBundle 'therubymug/vim-pyte'
+      " molokai カラースキーム
+      NeoBundle 'tomasr/molokai'
+
+      " カラースキーム一覧表示に Unite.vim を使う
+      NeoBundle 'Shougo/unite.vim'
+      NeoBundle 'ujihisa/unite-colorscheme'
+
+      "デフォルトのカラースキーマ
+      colorscheme jellybeans
+
+
+
 
     "NeoBundleここまで
     " (ry
