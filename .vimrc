@@ -66,7 +66,15 @@ endif
 " 編集設定
 "----------------------------------------
 
- 
+
+ if has('multi_byte_ime') || has('xim') || has('gui_macvim' || has('gui_running'))
+  " Insert mode: lmap off, IME ON
+  set iminsert=2
+  " Serch mode: lmap off, IME ON
+  set imsearch=2
+  " Normal mode: IME off
+  inoremap <silent> <ESC> <ESC>:set iminsert=0<CR>
+endif
 
 set shiftround          " '<'や'>'でインデントする際に'shiftwidth'の倍数に丸める
 set infercase           " 補完時に大文字小文字を区別しない
@@ -388,6 +396,7 @@ if filereadable(s:local_vimrc)
 endif
 
 
+
 "----------------------------------------
 " 挿入モード
 "----------------------------------------
@@ -559,7 +568,11 @@ else
     nnoremap <silent> [unite]c :<C-u>Unite bookmark<CR>
     nnoremap <silent> [unite]o :<C-u>Unite outline<CR>
     nnoremap <silent> [unite]t :<C-u>Unite tab<CR>
-    nnoremap <silent> [unite]w :<C-u>Unite window<CR>
+    nnoremap <silent> [unite]w :<C-u>Unite window<CR>       
+    
+    "現在のファイルをブックマークします。
+    nnoremap <silent> <C-d> :UniteBookmarkAdd<CR>
+    
     let s:hooks = neobundle#get_hooks("unite.vim")
     function! s:hooks.on_source(bundle)
 	    " start unite in insert mode
