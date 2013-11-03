@@ -501,7 +501,7 @@ endif
 set nocompatible
 filetype off
 let s:noplugin = 0
-let s:bundle_root = expand('~/.vim/bundle')
+let s:bundle_root = expand('$HOME/.vim/bundle')
 let s:neobundle_root = s:bundle_root . '/neobundle.vim'
 if !isdirectory(s:neobundle_root) || v:version < 702
     " NeoBundleが存在しない、もしくはVimのバージョンが古い場合はプラグインを一切
@@ -640,7 +640,9 @@ else
     let s:hooks = neobundle#get_hooks("vim-indent-guides")
     function! s:hooks.on_source(bundle)
 	    let g:indent_guides_guide_size = 1
-	    IndentGuidesEnable " 2013-06-24 10:00 追記
+      if isdirectory('$VIM_RUNTIME/vim-indent-guides')
+        IndentGuidesEnable " 2013-06-24 10:00 追記
+      endif
     endfunction
 
     "todo設定
