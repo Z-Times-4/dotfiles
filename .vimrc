@@ -37,6 +37,8 @@ elseif isdirectory($VIM . '\vimfiles')
   let $MY_VIMRUNTIME = $VIM.'\vimfiles'
 endif
 
+"au BufEnter * execute 'lcd ' fnameescape(expand('%:p:h'))
+
 " ランタイムパスを通す必要のあるプラグインを使用する場合、
 " $MY_VIMRUNTIMEを使用すると Windows/Linuxで切り分ける必要が無くなります。
 " 例) vimfiles/qfixapp (Linuxでは~/.vim/qfixapp)にランタイムパスを通す場合
@@ -272,6 +274,10 @@ if has('win32') || has('win64')
     silent execute cmd
     silent! let &shellxquote = saved_sxq
   endfunction
+endif
+
+if has('win32')
+  let g:vimproc_dll_path = '$MY_VIMRUNTIME/.bundle/vimproc/autoload/vimproc_win32.dll'
 endif
 
 " 現バッファの差分表示(変更箇所の表示)
@@ -520,13 +526,13 @@ else
     " 非同期通信を可能にする
     " 'build'が指定されているのでインストール時に自動的に
     " 指定されたコマンドが実行され vimproc がコンパイルされる
-    NeoBundle "Shougo/vimproc", {
-        \ "build": {
-        \   "windows"   : "make -f make_mingw32.mak",
-        \   "cygwin"    : "make -f make_cygwin.mak",
-        \   "mac"       : "make -f make_mac.mak",
-        \   "unix"      : "make -f make_unix.mak",
-        \ }}
+    "NeoBundle "Shougo/vimproc", {
+    "    \ "build": {
+     "   \   "windows"   : "make -f make_mingw32.mak",
+     "   \   "cygwin"    : "make -f make_cygwin.mak",
+     "   \   "mac"       : "make -f make_mac.mak",
+     "   \   "unix"      : "make -f make_unix.mak",
+     "   \ }}
     NeoBundleLazy 'Shougo/neocomplete.vim', {
 			    \ "autoload": {"insert": 1}}
     " neocompleteのhooksを取得
@@ -571,8 +577,9 @@ else
     nnoremap <silent> [unite]w :<C-u>Unite window<CR>       
     
     "現在のファイルをブックマークします。
-    nnoremap <silent> <C-d> :UniteBookmarkAdd<CR>
-    
+    nnoremap <silent> [unite]d :UniteBookmarkAdd<CR>
+
+
     let s:hooks = neobundle#get_hooks("unite.vim")
     function! s:hooks.on_source(bundle)
 	    " start unite in insert mode
