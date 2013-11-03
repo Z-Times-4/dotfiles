@@ -498,7 +498,6 @@ endif
 " 各種プラグイン設定
 "----------------------------------------
 
-set nocompatible
 filetype off
 let s:noplugin = 0
 let s:bundle_root = expand('$HOME/.vim/bundle')
@@ -526,13 +525,13 @@ else
     " 非同期通信を可能にする
     " 'build'が指定されているのでインストール時に自動的に
     " 指定されたコマンドが実行され vimproc がコンパイルされる
-    "NeoBundle "Shougo/vimproc", {
-    "    \ "build": {
-     "   \   "windows"   : "make -f make_mingw32.mak",
-     "   \   "cygwin"    : "make -f make_cygwin.mak",
-     "   \   "mac"       : "make -f make_mac.mak",
-     "   \   "unix"      : "make -f make_unix.mak",
-     "   \ }}
+    NeoBundle "Shougo/vimproc", {
+          \ "build": {
+          \   "windows"   : "make -f make_mingw32.mak",
+          \   "cygwin"    : "make -f make_cygwin.mak",
+          \   "mac"       : "make -f make_mac.mak",
+          \   "unix"      : "make -f make_unix.mak",
+          \ }}
     NeoBundleLazy 'Shougo/neocomplete.vim', {
 			    \ "autoload": {"insert": 1}}
     " neocompleteのhooksを取得
