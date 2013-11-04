@@ -277,7 +277,7 @@ if has('win32') || has('win64')
 endif
 
 if has('win32')
-  let g:vimproc_dll_path = '$MY_VIMRUNTIME/.bundle/vimproc/autoload/vimproc_win32.dll'
+  let g:vimproc_dll_path = $MY_VIMRUNTIME . '/bundle/vimproc/autoload/vimproc_win32.dll'
 endif
 
 " 現バッファの差分表示(変更箇所の表示)
