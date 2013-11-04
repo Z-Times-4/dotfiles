@@ -362,6 +362,7 @@ set shiftwidth=2
 "折りたたみ方法をインデントに指定
 set foldmethod=indent
 set foldcolumn=3
+set foldlevel=100
  
 " make, grep などのコマンド後に自動的にQuickFixを開く
 autocmd MyAutoCmd QuickfixCmdPost make,grep,grepadd,vimgrep copen
@@ -639,7 +640,7 @@ else
     let s:hooks = neobundle#get_hooks("vim-indent-guides")
     function! s:hooks.on_source(bundle)
 	    let g:indent_guides_guide_size = 1
-      if isdirectory('$VIM_RUNTIME/vim-indent-guides')
+      if isdirectory($MY_VIMRUNTIME . '/vim-indent-guides')
         IndentGuidesEnable " 2013-06-24 10:00 追記
       endif
     endfunction
@@ -685,7 +686,7 @@ else
     NeoBundle 'xolox/vim-session', {
 			    \ 'depends' : 'xolox/vim-misc',
 			    \ }
-    if isdirectory('$VIM_RUNTIME/xolox')
+    if isdirectory($MY_VIMRUNTIME . '/bundle/vim-session')
       " 現在のディレクトリ直下の .vimsessions/ を取得 
       let s:local_session_directory = xolox#misc#path#merge(getcwd(), '.vimsessions')
       " 存在すれば
