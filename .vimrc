@@ -137,12 +137,15 @@ set backspace=indent,eol,start
 set ambiwidth=double
 " コマンドライン補完するときに強化されたものを使う
 set wildmenu
+set wildmode=list:longest,full
+
 " マウスを有効にする
 if has('mouse')
   set mouse=a
 endif
 " pluginを使用可能にする
 filetype plugin indent on
+
 
 "----------------------------------------
 " 検索
@@ -353,6 +356,120 @@ nnoremap <silent> [toggle]s :setl spell!<CR>:setl spell?<CR>
 nnoremap <silent> [toggle]l :setl list!<CR>:setl list?<CR>
 nnoremap <silent> [toggle]t :setl expandtab!<CR>:setl expandtab?<CR>
 nnoremap <silent> [toggle]w :setl wrap!<CR>:setl wrap?<CR>
+
+ "タブ移動関連 
+nnoremap <C-Tab> gt
+nnoremap <C-S-Tab> gT
+
+
+"プレフィックス
+nnoremap t; t
+nnoremap t <Nop>
+
+"新しいバッファを開く
+nnoremap to :<C-u>edit<Space>
+nnoremap tt :<C-u>tabnew<Space>
+
+"カレントバッファのディレクトリを元に新しいバッファを開く
+nnoremap <expr> tO ':<C-u>edit ' . GetRelativePath()
+nnoremap <expr> tT ':<C-u>tabnew ' . GetRelativePath()
+
+function! GetRelativePath()
+    let path = expand('%:~:.:h')
+    if path == '.'
+        return ""
+    else
+        return path . '/'
+    endif
+endfunction
+
+"画面分割
+nnoremap ts :<C-u>split<Space>
+nnoremap <expr> tS ':<C-u>split ' . GetRelativePath()
+nnoremap tv :<C-u>vsplit<Space>
+nnoremap <expr> tV ':<C-u>vsplit ' . GetRelativePath()
+
+"タブを閉じる
+nnoremap <silent> td :<C-u>tabclose<CR>
+
+"ウィンドウ・バッファをタブに移動する
+nnoremap <silent> tm :<C-u>call MoveToNewTab()<CR>
+
+function! MoveToNewTab()
+    tab split
+    tabprevious
+
+    if winnr('$') > 1
+        close
+    elseif bufnr('$') > 1
+        buffer #
+    endif
+
+    tabnext
+endfunction
+
+nnoremap <silent> t] :buffer<CR>
+nnoremap <silent> tn :bnext<CR>
+nnoremap <silent> tp :bprevious<CR>
+nnoremap <silent> tD :<C-u>bdelete<CR>
+nnoremap <silent> tl :<C-u>buffers<CR>
+
+nnoremap tgf <C-w>gf
+nnoremap tgF <C-w>gF
+for n in range(1, 9)
+    exe 'nnoremap <silent> t' . n ' :<C-u>tabnext ' . n . '<CR>'
+endfor
+
+"タブ表示ラベル
+set tabline=%!MakeTabLine()
+
+function! MakeTabLine()
+    let s = ''
+
+    for n in range(1, tabpagenr('$'))
+        if n == tabpagenr()
+            let s .= '%#TabLineSel#'
+        else
+            let s .= '%#TabLine#'
+        endif
+
+        let s .= '%' . n . 'T'
+
+        let s .= ' %{MakeTabLabel(' . n . ')} '
+
+        let s .= '%#TabLineFill#%T'
+        let s .= '|'
+    endfor
+
+    let s .= '%#TabLineFill#%T'
+    let s .= '%=%#TabLine#'
+    let s .= '%{fnamemodify(getcwd(), ":~:h")}%<'
+    return s
+endfunction
+
+function! MakeTabLabel(n)
+    let bufnrs = tabpagebuflist(a:n)
+    let bufnr = bufnrs[tabpagewinnr(a:n) - 1]
+
+    let bufname = bufname(bufnr)
+    if bufname == ''
+        let bufname = '[No Name]'
+    else
+        let bufname = fnamemodify(bufname, ":t")
+    endif
+
+    let no = len(bufnrs)
+    if no == 1
+        let no = ''
+    endif
+
+    let mod = len(filter(bufnrs, 'getbufvar(v:val, "&modified")')) ? '+' : ''
+    let sp = (no . mod) == '' ? '' : ' '
+
+    let s = no . mod . sp . bufname
+    return s
+endfunction
+ 
 
 "以下デフォルトの値
 set expandtab
