@@ -825,6 +825,17 @@ else
       unlet s:local_session_directory
     endif
 
+    "grepのヘルパー
+    NeoBundle 'fuenor/qfixgrep'
+
+    "デフォルトで使用する外部grep
+    set grepprg=grep
+
+    "grepに含めたくない拡張子
+    let MyGrep_ExcludeReg = '[~#]$\|\.dll$\|\.exe$\|\.lnk$\|\.o$\|\.obj$\|\.pdf$\|\.xls$'
+
+    "大文字、小文字を気にせずに検索する。
+    let g:MyGrepDefault_Ignorecase = 1
 
     "カラースキーマ定義
       " solarized カラースキーム
