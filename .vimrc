@@ -469,7 +469,9 @@ function! MakeTabLabel(n)
     let s = no . mod . sp . bufname
     return s
 endfunction
- 
+
+"コピペ用
+vnoremap <silent> <C-p> "0p<CR>
 
 "以下デフォルトの値
 set expandtab
