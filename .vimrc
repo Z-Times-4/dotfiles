@@ -470,6 +470,16 @@ function! MakeTabLabel(n)
     return s
 endfunction
 
+"tabpagecdプラグイン替わり
+"command! -nargs=? TabpageCD
+"      \ execute 'cd' fnameescape(<q-args>) | let t:cwd = getcwd()
+
+"augroup tabpagecwd
+"  autocmd!
+"  autocmd TabEnter * if !exists('t:cwd') | let t:cwd = getcwd() | endif |
+"        \  execute 'TabpageCD' fnameescape(t:cwd)
+"augroup END
+
 "コピペ用
 vnoremap <silent> <C-p> "0p<CR>
 
@@ -502,7 +512,7 @@ endfunction
 autocmd MyAutoCmd BufWritePre * call s:mkdir(expand('<afile>:p:h'), v:cmdbang)
 
 " vim 起動時のみカレントディレクトリを開いたファイルの親ディレクトリに指定
-autocmd MyAutoCmd VimEnter * call s:ChangeCurrentDir('', '')
+"autocmd MyAutoCmd VimEnter * call s:ChangeCurrentDir('', '')
 function! s:ChangeCurrentDir(directory, bang)
     if a:directory == ''
         lcd %:p:h
@@ -864,9 +874,11 @@ else
       NeoBundle 'ujihisa/unite-colorscheme'
 
       "デフォルトのカラースキーマ
-      "colorscheme jellybeans
-
-      NeoBundle 'kana/vim-tabpagecd'
+      set background=light
+      let g:solarized_contrast="hight"
+      let g:solarized_italic=0
+      colorscheme solarized
+      "NeoBundle 'kana/vim-tabpagecd'
 
 
     "NeoBundleここまで
