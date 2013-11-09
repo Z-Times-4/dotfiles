@@ -616,13 +616,13 @@ endif
 """"""""""""""""""""""""""""""
 " grep,tagsのためカレントディレクトリをファイルと同じディレクトリに移動する
 """"""""""""""""""""""""""""""
-" if exists('+autochdir')
-"   "autochdirがある場合カレントディレクトリを移動
-"   set autochdir
-" else
-"   "autochdirが存在しないが、カレントディレクトリを移動したい場合
-"   au BufEnter * execute ":silent! lcd " . escape(expand("%:p:h"), ' ')
-" endif
+ if exists('+autochdir')
+   "autochdirがある場合カレントディレクトリを移動
+   set autochdir
+ else
+   "autochdirが存在しないが、カレントディレクトリを移動したい場合
+   au BufEnter * execute ":silent! lcd " . escape(expand("%:p:h"), ' ')
+ endif
 
 "----------------------------------------
 " 各種プラグイン設定
@@ -878,7 +878,6 @@ else
       let g:solarized_contrast="hight"
       let g:solarized_italic=0
       colorscheme solarized
-      "NeoBundle 'kana/vim-tabpagecd'
 
 
     "NeoBundleここまで
