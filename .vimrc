@@ -6,14 +6,14 @@
 "        Version: 7.40
 "=============================================================================
 
- " release autogroup in MyAutoCmd
+" release autogroup in MyAutoCmd
 augroup MyAutoCmd
   autocmd!
 augroup END
 
 
 set encoding=utf-8
-set fileencodings=UTF-8
+set fileencodings=iso-2022-jp,cp932,sjis,euc-jp,utf-8
 set nocompatible
 scriptencoding utf-8
 " scriptencodingと、このファイルのエンコーディングが一致するよう注意！
@@ -71,7 +71,7 @@ endif
 "----------------------------------------
 
 
- if has('multi_byte_ime') || has('xim') || has('gui_macvim' || has('gui_running'))
+if has('multi_byte_ime') || has('xim') || has('gui_macvim' || has('gui_running'))
   " Insert mode: lmap off, IME ON
   set iminsert=2
   " Serch mode: lmap off, IME ON
@@ -97,11 +97,11 @@ set backspace=indent,eol,start
 " クリップボードをデフォルトのレジスタとして指定。後にYankRingを使うので
 " 'unnamedplus'が存在しているかどうかで設定を分ける必要がある
 if has('unnamedplus')
-    " set clipboard& clipboard+=unnamedplus " 2013-07-03 14:30 unnamed 追加
-    set clipboard& clipboard+=unnamedplus,unnamed 
+  " set clipboard& clipboard+=unnamedplus " 2013-07-03 14:30 unnamed 追加
+  set clipboard& clipboard+=unnamedplus,unnamed 
 else
-    " set clipboard& clipboard+=unnamed,autoselect 2013-06-24 10:00 autoselect 削除
-    set clipboard& clipboard+=unnamed
+  " set clipboard& clipboard+=unnamed,autoselect 2013-06-24 10:00 autoselect 削除
+  set clipboard& clipboard+=unnamed
 endif
 
 
@@ -292,7 +292,7 @@ command! -nargs=? -complete=file Diff if '<args>'=='' | browse vertical diffspli
 " パッチコマンド
 set patchexpr=MyPatch()
 function! MyPatch()
-   call system($VIM."\\'.'patch -o " . v:fname_out . " " . v:fname_in . " < " . v:fname_diff)
+  call system($VIM."\\'.'patch -o " . v:fname_out . " " . v:fname_in . " < " . v:fname_diff)
 endfunction
 
 "----------------------------------------
@@ -315,7 +315,7 @@ nnoremap k gk
 nnoremap l <Right>zv
 
 
- " 入力モード中に素早くjjと入力した場合はESCとみなす
+" 入力モード中に素早くjjと入力した場合はESCとみなす
 inoremap jj <Esc>
 
 " ESCを二回押すことでハイライトを消す
@@ -332,7 +332,7 @@ nnoremap # #zz
 nnoremap g* g*zz
 nnoremap g# g#zz
 
- " vを二回で行末まで選択
+" vを二回で行末まで選択
 vnoremap v $h
 
 " TABにて対応ペアにジャンプ
@@ -359,7 +359,7 @@ nnoremap <silent> [toggle]l :setl list!<CR>:setl list?<CR>
 nnoremap <silent> [toggle]t :setl expandtab!<CR>:setl expandtab?<CR>
 nnoremap <silent> [toggle]w :setl wrap!<CR>:setl wrap?<CR>
 
- "タブ移動関連 
+"タブ移動関連 
 nnoremap <C-Tab> gt
 nnoremap <C-S-Tab> gT
 
@@ -377,12 +377,12 @@ nnoremap <expr> tO ':<C-u>edit ' . GetRelativePath()
 nnoremap <expr> tT ':<C-u>tabnew ' . GetRelativePath()
 
 function! GetRelativePath()
-    let path = expand('%:~:.:h')
-    if path == '.'
-        return ""
-    else
-        return path . '/'
-    endif
+  let path = expand('%:~:.:h')
+  if path == '.'
+    return ""
+  else
+    return path . '/'
+  endif
 endfunction
 
 "画面分割
@@ -398,16 +398,16 @@ nnoremap <silent> td :<C-u>tabclose<CR>
 nnoremap <silent> tm :<C-u>call MoveToNewTab()<CR>
 
 function! MoveToNewTab()
-    tab split
-    tabprevious
+  tab split
+  tabprevious
 
-    if winnr('$') > 1
-        close
-    elseif bufnr('$') > 1
-        buffer #
-    endif
+  if winnr('$') > 1
+    close
+  elseif bufnr('$') > 1
+    buffer #
+  endif
 
-    tabnext
+  tabnext
 endfunction
 
 nnoremap <silent> t] :buffer<CR>
@@ -419,57 +419,57 @@ nnoremap <silent> tl :<C-u>buffers<CR>
 nnoremap tgf <C-w>gf
 nnoremap tgF <C-w>gF
 for n in range(1, 9)
-    exe 'nnoremap <silent> t' . n ' :<C-u>tabnext ' . n . '<CR>'
+  exe 'nnoremap <silent> t' . n ' :<C-u>tabnext ' . n . '<CR>'
 endfor
 
 "タブ表示ラベル
 set tabline=%!MakeTabLine()
 
 function! MakeTabLine()
-    let s = ''
+  let s = ''
 
-    for n in range(1, tabpagenr('$'))
-        if n == tabpagenr()
-            let s .= '%#TabLineSel#'
-        else
-            let s .= '%#TabLine#'
-        endif
+  for n in range(1, tabpagenr('$'))
+    if n == tabpagenr()
+      let s .= '%#TabLineSel#'
+    else
+      let s .= '%#TabLine#'
+    endif
 
-        let s .= '%' . n . 'T'
+    let s .= '%' . n . 'T'
 
-        let s .= ' %{MakeTabLabel(' . n . ')} '
-
-        let s .= '%#TabLineFill#%T'
-        let s .= '|'
-    endfor
+    let s .= ' %{MakeTabLabel(' . n . ')} '
 
     let s .= '%#TabLineFill#%T'
-    let s .= '%=%#TabLine#'
-    let s .= '%{fnamemodify(getcwd(), ":~:h")}%<'
-    return s
+    let s .= '|'
+  endfor
+
+  let s .= '%#TabLineFill#%T'
+  let s .= '%=%#TabLine#'
+  let s .= '%{fnamemodify(getcwd(), ":~:h")}%<'
+  return s
 endfunction
 
 function! MakeTabLabel(n)
-    let bufnrs = tabpagebuflist(a:n)
-    let bufnr = bufnrs[tabpagewinnr(a:n) - 1]
+  let bufnrs = tabpagebuflist(a:n)
+  let bufnr = bufnrs[tabpagewinnr(a:n) - 1]
 
-    let bufname = bufname(bufnr)
-    if bufname == ''
-        let bufname = '[No Name]'
-    else
-        let bufname = fnamemodify(bufname, ":t")
-    endif
+  let bufname = bufname(bufnr)
+  if bufname == ''
+    let bufname = '[No Name]'
+  else
+    let bufname = fnamemodify(bufname, ":t")
+  endif
 
-    let no = len(bufnrs)
-    if no == 1
-        let no = ''
-    endif
+  let no = len(bufnrs)
+  if no == 1
+    let no = ''
+  endif
 
-    let mod = len(filter(bufnrs, 'getbufvar(v:val, "&modified")')) ? '+' : ''
-    let sp = (no . mod) == '' ? '' : ' '
+  let mod = len(filter(bufnrs, 'getbufvar(v:val, "&modified")')) ? '+' : ''
+  let sp = (no . mod) == '' ? '' : ' '
 
-    let s = no . mod . sp . bufname
-    return s
+  let s = no . mod . sp . bufname
+  return s
 endfunction
 
 "tabpagecdプラグイン替わり
@@ -489,12 +489,12 @@ vnoremap <silent> <C-p> "0p<CR>
 set expandtab
 set tabstop=2
 set shiftwidth=2
- 
+
 "折りたたみ方法をインデントに指定
 set foldmethod=indent
 set foldcolumn=3
 set foldlevel=100
- 
+
 " make, grep などのコマンド後に自動的にQuickFixを開く
 autocmd MyAutoCmd QuickfixCmdPost make,grep,grepadd,vimgrep copen
 
@@ -516,21 +516,21 @@ autocmd MyAutoCmd BufWritePre * call s:mkdir(expand('<afile>:p:h'), v:cmdbang)
 " vim 起動時のみカレントディレクトリを開いたファイルの親ディレクトリに指定
 "autocmd MyAutoCmd VimEnter * call s:ChangeCurrentDir('', '')
 function! s:ChangeCurrentDir(directory, bang)
-    if a:directory == ''
-        lcd %:p:h
-    else
-        execute 'lcd' . a:directory
-    endif
+  if a:directory == ''
+    lcd %:p:h
+  else
+    execute 'lcd' . a:directory
+  endif
 
-    if a:bang == ''
-        pwd
-    endif
+  if a:bang == ''
+    pwd
+  endif
 endfunction
 
 " ~/.vimrc.localが存在する場合のみ設定を読み込む
 let s:local_vimrc = expand('~/.vimrc.local')
 if filereadable(s:local_vimrc)
-    execute 'source ' . s:local_vimrc
+  execute 'source ' . s:local_vimrc
 endif
 
 
@@ -618,13 +618,13 @@ endif
 """"""""""""""""""""""""""""""
 " grep,tagsのためカレントディレクトリをファイルと同じディレクトリに移動する
 """"""""""""""""""""""""""""""
- if exists('+autochdir')
-   "autochdirがある場合カレントディレクトリを移動
-   set autochdir
- else
-   "autochdirが存在しないが、カレントディレクトリを移動したい場合
-   au BufEnter * execute ":silent! lcd " . escape(expand("%:p:h"), ' ')
- endif
+if exists('+autochdir')
+  "autochdirがある場合カレントディレクトリを移動
+  set autochdir
+else
+  "autochdirが存在しないが、カレントディレクトリを移動したい場合
+  au BufEnter * execute ":silent! lcd " . escape(expand("%:p:h"), ' ')
+endif
 
 "----------------------------------------
 " 各種プラグイン設定
@@ -635,258 +635,273 @@ let s:noplugin = 0
 let s:bundle_root = expand('$HOME/.vim/bundle')
 let s:neobundle_root = s:bundle_root . '/neobundle.vim'
 if !isdirectory(s:neobundle_root) || v:version < 702
-    " NeoBundleが存在しない、もしくはVimのバージョンが古い場合はプラグインを一切
-    " 読み込まない
-    let s:noplugin = 1
+  " NeoBundleが存在しない、もしくはVimのバージョンが古い場合はプラグインを一切
+  " 読み込まない
+  let s:noplugin = 1
 else
-    " NeoBundleを'runtimepath'に追加し初期化を行う
-    if has('vim_starting')
-        execute "set runtimepath+=" . s:neobundle_root
+  " NeoBundleを'runtimepath'に追加し初期化を行う
+  if has('vim_starting')
+    execute "set runtimepath+=" . s:neobundle_root
+  endif
+  call neobundle#rc(s:bundle_root)
+
+  " NeoBundle自身をNeoBundleで管理させる
+  NeoBundleFetch 'Shougo/neobundle.vim'
+
+  "タブで開けるように設定
+  if has('clientserver')
+    NeoBundle 'thinca/vim-singleton'
+    call singleton#enable()
+  endif
+
+  " 非同期通信を可能にする
+  " 'build'が指定されているのでインストール時に自動的に
+  " 指定されたコマンドが実行され vimproc がコンパイルされる
+  NeoBundle "Shougo/vimproc", {
+        \ "build": {
+        \   "windows"   : "make -f make_mingw32.mak",
+        \   "cygwin"    : "make -f make_cygwin.mak",
+        \   "mac"       : "make -f make_mac.mak",
+        \   "unix"      : "make -f make_unix.mak",
+        \ }}
+  NeoBundleLazy 'Shougo/neocomplete.vim', {
+        \ "autoload": {"insert": 1}}
+  " neocompleteのhooksを取得
+  let s:hooks = neobundle#get_hooks("neocomplete.vim")
+  " neocomplete用の設定関数を定義。下記関数はneocompleteロード時に実行される
+  function! s:hooks.on_source(bundle)
+    let g:acp_enableAtStartup = 0
+    let g:neocomplete#enable_smart_case = 1
+    " NeoCompleteを有効化
+    "NeoCompleteEnable
+  endfunction
+  NeoBundleLazy 'Shougo/neosnippet.vim', {
+        \ "autoload": {"insert": 1}}
+  " 'GundoToggle'が呼ばれるまでロードしない
+  NeoBundleLazy 'sjl/gundo.vim', {
+        \ "autoload": {"commands": ["GundoToggle"]}}
+  " '<Plug>TaskList'というマッピングが呼ばれるまでロードしない
+  NeoBundleLazy 'vim-scripts/TaskList.vim', {
+        \ "autoload": {"mappings": ['<Plug>TaskList']}}
+  " HTMLが開かれるまでロードしない
+  NeoBundleLazy 'mattn/zencoding-vim', {
+        \ "autoload": {"filetypes": ['html']}}
+  NeoBundleLazy "Shougo/unite.vim", {
+        \ "autoload": {
+        \   "commands": ["Unite", "UniteWithBufferDir"]
+        \ }}
+
+  "unite設定
+  NeoBundleLazy 'h1mesuke/unite-outline', {
+        \ "autoload": {
+        \   "unite_sources": ["outline"],
+        \ }}
+  nnoremap [unite] <Nop>
+  nmap U [unite]
+  nnoremap <silent> [unite]f :<C-u>UniteWithBufferDir -buffer-name=files file<CR>
+  nnoremap <silent> [unite]b :<C-u>Unite buffer<CR>
+  nnoremap <silent> [unite]r :<C-u>Unite register<CR>
+  nnoremap <silent> [unite]m :<C-u>Unite file_mru<CR>
+  nnoremap <silent> [unite]c :<C-u>Unite bookmark<CR>
+  nnoremap <silent> [unite]o :<C-u>Unite outline<CR>
+  nnoremap <silent> [unite]t :<C-u>Unite tab<CR>
+  nnoremap <silent> [unite]w :<C-u>Unite window<CR>       
+
+  "現在のファイルをブックマークします。
+  nnoremap <silent> [unite]d :UniteBookmarkAdd<CR>
+
+
+  let s:hooks = neobundle#get_hooks("unite.vim")
+  function! s:hooks.on_source(bundle)
+    " start unite in insert mode
+    let g:unite_enable_start_insert = 1
+    " use vimfiler to open directory
+    call unite#custom_default_action("source/bookmark/directory", "vimfiler")
+    call unite#custom_default_action("directory", "vimfiler")
+    call unite#custom_default_action("directory_mru", "vimfiler")
+    autocmd MyAutoCmd FileType unite call s:unite_settings()
+    function! s:unite_settings()
+      imap <buffer> <Esc><Esc> <Plug>(unite_exit)
+      nmap <buffer> <Esc> <Plug>(unite_exit)
+      nmap <buffer> <C-n> <Plug>(unite_select_next_line)
+      nmap <buffer> <C-p> <Plug>(unite_select_previous_line)
+    endfunction
+  endfunction
+
+  "vimfiler設定
+  NeoBundleLazy "Shougo/vimfiler", {
+        \ "depends": ["Shougo/unite.vim"],
+        \ "autoload": {
+        \   "commands": ["VimFilerTab", "VimFiler", "VimFilerExplorer"],
+        \   "mappings": ['<Plug>(vimfiler_switch)'],
+        \   "explorer": 1,
+        \ }}
+  nnoremap <Leader>e :VimFilerExplorer<CR>
+  " close vimfiler automatically when there are only vimfiler open
+  autocmd MyAutoCmd BufEnter * if (winnr('$') == 1 && &filetype ==# 'vimfiler') | q | endif
+  let s:hooks = neobundle#get_hooks("vimfiler")
+  function! s:hooks.on_source(bundle)
+    let g:vimfiler_as_default_explorer = 1
+    let g:vimfiler_enable_auto_cd = 1
+
+    " .から始まるファイルおよび.pycで終わるファイルを不可視パターンに
+    " 2013-08-14 追記
+    let g:vimfiler_ignore_pattern = "\%(^\..*\|\.pyc$\)"
+
+    " vimfiler specific key mappings
+    autocmd MyAutoCmd FileType vimfiler call s:vimfiler_settings()
+    function! s:vimfiler_settings()
+      " ^^ to go up
+      nmap <buffer> ^^ <Plug>(vimfiler_switch_to_parent_directory)
+      " use R to refresh
+      nmap <buffer> R <Plug>(vimfiler_redraw_screen)
+      " overwrite C-l
+      nmap <buffer> <C-l> <C-w>l
+    endfunction
+  endfunction
+
+  "vimshell
+  NeoBundle 'Shougo/vimshell'
+
+
+  "テキスト編集関係
+  NeoBundle 'tpope/vim-surround'
+  NeoBundle 'vim-scripts/Align'
+  NeoBundle 'vim-scripts/YankRing.vim'
+
+  "インデント可視化
+  NeoBundle "nathanaelkane/vim-indent-guides"
+  " let g:indent_guides_enable_on_vim_startup = 1 2013-06-24 10:00 削除
+  let s:hooks = neobundle#get_hooks("vim-indent-guides")
+  function! s:hooks.on_source(bundle)
+    let g:indent_guides_guide_size = 1
+    if isdirectory($MY_VIMRUNTIME . '/bundle/vim-indent-guides')
+      IndentGuidesEnable " 2013-06-24 10:00 追記
     endif
-    call neobundle#rc(s:bundle_root)
+  endfunction
 
-    " NeoBundle自身をNeoBundleで管理させる
-    NeoBundleFetch 'Shougo/neobundle.vim'
+  "todo設定
+  NeoBundleLazy "sjl/gundo.vim", {
+        \ "autoload": {
+        \   "commands": ['GundoToggle'],
+        \}}
+  nnoremap <Leader>g :GundoToggle<CR>
 
-    "タブで開けるように設定
-    if has('clientserver')
-	    NeoBundle 'thinca/vim-singleton'
-	    call singleton#enable()
+  NeoBundleLazy "thinca/vim-quickrun", {
+        \ "autoload": {
+        \   "mappings": [['nxo', '<Plug>(quickrun)']]
+        \ }}
+  nmap <Leader>r <Plug>(quickrun)
+  let s:hooks = neobundle#get_hooks("vim-quickrun")
+  function! s:hooks.on_source(bundle)
+    let g:quickrun_config = {
+          \ "*": {"runner": "remote/vimproc"},
+          \ }
+  endfunction
+  "Python補完
+  "NeoBundleLazy "davidhalter/jedi-vim", {
+  "      \ "autoload": {
+  "      \   "filetypes": ["python", "python3", "djangohtml"],
+  "      \   "build": {
+  "      \     "mac": "pip install jedi",
+  "      \     "unix": "pip install jedi",
+  "      \   }
+  "      \ }}
+  NeoBundleLazy "davidhalter/jedi-vim", {
+        \ "autoload": {
+        \   "filetypes": ["python", "python3", "djangohtml"],
+        \ },
+        \ "build": {
+        \   "mac": "pip install jedi",
+        \   "unix": "pip install jedi",
+        \ }}
+  let s:hooks = neobundle#get_hooks("jedi-vim")
+  function! s:hooks.on_source(bundle)
+    " jediにvimの設定を任せると'completeopt+=preview'するので
+    " 自動設定機能をOFFにし手動で設定を行う
+    let g:jedi#auto_vim_configuration = 0
+    " 補完の最初の項目が選択された状態だと使いにくいためオフにする
+    let g:jedi#popup_select_first = 0
+    " quickrunと被るため大文字に変更
+    let g:jedi#rename_command = '<Leader>R'
+    " gundoと被るため大文字に変更 (2013-06-24 10:00 追記）
+    let g:jedi#goto_command = '<Leader>G'
+  endfunction
+
+  "前回のセッション回復
+  NeoBundle 'xolox/vim-session', {
+        \ 'depends' : 'xolox/vim-misc',
+        \ }
+  if isdirectory($MY_VIMRUNTIME . '/bundle/vim-session')
+    " 現在のディレクトリ直下の .vimsessions/ を取得 
+    let s:local_session_directory = xolox#misc#path#merge(getcwd(), '.vimsessions')
+    " 存在すれば
+    if isdirectory(s:local_session_directory)
+      " session保存ディレクトリをそのディレクトリの設定
+      let g:session_directory = s:local_session_directory
+      " vimを辞める時に自動保存
+      let g:session_autosave = 'yes'
+      " 引数なしでvimを起動した時にsession保存ディレクトリのdefault.vimを開く
+      let g:session_autoload = 'yes'
+      " 1分間に1回自動保存
+      let g:session_autosave_periodic = 1
+    else
+      let g:session_autosave = 'no'
+      let g:session_autoload = 'no'
     endif
+    unlet s:local_session_directory
+  endif
 
-    " 非同期通信を可能にする
-    " 'build'が指定されているのでインストール時に自動的に
-    " 指定されたコマンドが実行され vimproc がコンパイルされる
-    NeoBundle "Shougo/vimproc", {
-          \ "build": {
-          \   "windows"   : "make -f make_mingw32.mak",
-          \   "cygwin"    : "make -f make_cygwin.mak",
-          \   "mac"       : "make -f make_mac.mak",
-          \   "unix"      : "make -f make_unix.mak",
-          \ }}
-    NeoBundleLazy 'Shougo/neocomplete.vim', {
-			    \ "autoload": {"insert": 1}}
-    " neocompleteのhooksを取得
-    let s:hooks = neobundle#get_hooks("neocomplete.vim")
-    " neocomplete用の設定関数を定義。下記関数はneocompleteロード時に実行される
-    function! s:hooks.on_source(bundle)
-	    let g:acp_enableAtStartup = 0
-	    let g:neocomplete#enable_smart_case = 1
-	    " NeoCompleteを有効化
-	    "NeoCompleteEnable
-    endfunction
-    NeoBundleLazy 'Shougo/neosnippet.vim', {
-			    \ "autoload": {"insert": 1}}
-    " 'GundoToggle'が呼ばれるまでロードしない
-    NeoBundleLazy 'sjl/gundo.vim', {
-			    \ "autoload": {"commands": ["GundoToggle"]}}
-    " '<Plug>TaskList'というマッピングが呼ばれるまでロードしない
-    NeoBundleLazy 'vim-scripts/TaskList.vim', {
-			    \ "autoload": {"mappings": ['<Plug>TaskList']}}
-    " HTMLが開かれるまでロードしない
-    NeoBundleLazy 'mattn/zencoding-vim', {
-			    \ "autoload": {"filetypes": ['html']}}
-    NeoBundleLazy "Shougo/unite.vim", {
-			    \ "autoload": {
-			    \   "commands": ["Unite", "UniteWithBufferDir"]
-			    \ }}
+  "grepのヘルパー
+  NeoBundle 'fuenor/qfixgrep'
 
-    "unite設定
-    NeoBundleLazy 'h1mesuke/unite-outline', {
-			    \ "autoload": {
-			    \   "unite_sources": ["outline"],
-			    \ }}
-    nnoremap [unite] <Nop>
-    nmap U [unite]
-    nnoremap <silent> [unite]f :<C-u>UniteWithBufferDir -buffer-name=files file<CR>
-    nnoremap <silent> [unite]b :<C-u>Unite buffer<CR>
-    nnoremap <silent> [unite]r :<C-u>Unite register<CR>
-    nnoremap <silent> [unite]m :<C-u>Unite file_mru<CR>
-    nnoremap <silent> [unite]c :<C-u>Unite bookmark<CR>
-    nnoremap <silent> [unite]o :<C-u>Unite outline<CR>
-    nnoremap <silent> [unite]t :<C-u>Unite tab<CR>
-    nnoremap <silent> [unite]w :<C-u>Unite window<CR>       
-    
-    "現在のファイルをブックマークします。
-    nnoremap <silent> [unite]d :UniteBookmarkAdd<CR>
+  "デフォルトで使用する外部grep
+  set grepprg=grep
+
+  "grepに含めたくない拡張子
+  let MyGrep_ExcludeReg = '[~#]$\|\.dll$\|\.exe$\|\.lnk$\|\.o$\|\.obj$\|\.pdf$\|\.xls$'
+
+  "大文字、小文字を気にせずに検索する。
+  let g:MyGrepDefault_Ignorecase = 1
+
+  "カラースキーマ定義
+  " solarized カラースキーム
+  NeoBundle 'altercation/vim-colors-solarized'
+  " mustang カラースキーム
+  NeoBundle 'croaker/mustang-vim'
+  " wombat カラースキーム
+  NeoBundle 'jeffreyiacono/vim-colors-wombat'
+  " jellybeans カラースキーム
+  NeoBundle 'nanotech/jellybeans.vim'
+  " lucius カラースキーム
+  NeoBundle 'vim-scripts/Lucius'
+  " zenburn カラースキーム
+  NeoBundle 'vim-scripts/Zenburn'
+  " mrkn256 カラースキーム
+  NeoBundle 'mrkn/mrkn256.vim'
+  " railscasts カラースキーム
+  NeoBundle 'jpo/vim-railscasts-theme'
+  " pyte カラースキーム
+  NeoBundle 'therubymug/vim-pyte'
+  " molokai カラースキーム
+  NeoBundle 'tomasr/molokai'
+
+  " カラースキーム一覧表示に Unite.vim を使う
+  NeoBundle 'Shougo/unite.vim'
+  NeoBundle 'ujihisa/unite-colorscheme'
+
+  "デフォルトのカラースキーマ
+  set background=light
+  let g:solarized_contrast="hight"
+  let g:solarized_italic=0
+  colorscheme solarized
 
 
-    let s:hooks = neobundle#get_hooks("unite.vim")
-    function! s:hooks.on_source(bundle)
-	    " start unite in insert mode
-	    let g:unite_enable_start_insert = 1
-	    " use vimfiler to open directory
-	    call unite#custom_default_action("source/bookmark/directory", "vimfiler")
-	    call unite#custom_default_action("directory", "vimfiler")
-	    call unite#custom_default_action("directory_mru", "vimfiler")
-	    autocmd MyAutoCmd FileType unite call s:unite_settings()
-	    function! s:unite_settings()
-		    imap <buffer> <Esc><Esc> <Plug>(unite_exit)
-		    nmap <buffer> <Esc> <Plug>(unite_exit)
-		    nmap <buffer> <C-n> <Plug>(unite_select_next_line)
-		    nmap <buffer> <C-p> <Plug>(unite_select_previous_line)
-	    endfunction
-    endfunction
-    
-    "vimfiler設定
-    NeoBundleLazy "Shougo/vimfiler", {
-			    \ "depends": ["Shougo/unite.vim"],
-			    \ "autoload": {
-			    \   "commands": ["VimFilerTab", "VimFiler", "VimFilerExplorer"],
-			    \   "mappings": ['<Plug>(vimfiler_switch)'],
-			    \   "explorer": 1,
-			    \ }}
-    nnoremap <Leader>e :VimFilerExplorer<CR>
-    " close vimfiler automatically when there are only vimfiler open
-    autocmd MyAutoCmd BufEnter * if (winnr('$') == 1 && &filetype ==# 'vimfiler') | q | endif
-    let s:hooks = neobundle#get_hooks("vimfiler")
-    function! s:hooks.on_source(bundle)
-	    let g:vimfiler_as_default_explorer = 1
-	    let g:vimfiler_enable_auto_cd = 1
+  "NeoBundleここまで
+  " (ry
 
-	    " .から始まるファイルおよび.pycで終わるファイルを不可視パターンに
-	    " 2013-08-14 追記
-	    let g:vimfiler_ignore_pattern = "\%(^\..*\|\.pyc$\)"
-
-	    " vimfiler specific key mappings
-	    autocmd MyAutoCmd FileType vimfiler call s:vimfiler_settings()
-	    function! s:vimfiler_settings()
-		    " ^^ to go up
-		    nmap <buffer> ^^ <Plug>(vimfiler_switch_to_parent_directory)
-		    " use R to refresh
-		    nmap <buffer> R <Plug>(vimfiler_redraw_screen)
-		    " overwrite C-l
-		    nmap <buffer> <C-l> <C-w>l
-	    endfunction
-    endfunction
-
-    "テキスト編集関係
-    NeoBundle 'tpope/vim-surround'
-    NeoBundle 'vim-scripts/Align'
-    NeoBundle 'vim-scripts/YankRing.vim'
-
-    "インデント可視化
-    NeoBundle "nathanaelkane/vim-indent-guides"
-    " let g:indent_guides_enable_on_vim_startup = 1 2013-06-24 10:00 削除
-    let s:hooks = neobundle#get_hooks("vim-indent-guides")
-    function! s:hooks.on_source(bundle)
-	    let g:indent_guides_guide_size = 1
-      if isdirectory($MY_VIMRUNTIME . '/bundle/vim-indent-guides')
-        IndentGuidesEnable " 2013-06-24 10:00 追記
-      endif
-    endfunction
-
-    "todo設定
-    NeoBundleLazy "sjl/gundo.vim", {
-			    \ "autoload": {
-			    \   "commands": ['GundoToggle'],
-			    \}}
-    nnoremap <Leader>g :GundoToggle<CR>
-
-    "Python補完
-    "NeoBundleLazy "davidhalter/jedi-vim", {
-    "      \ "autoload": {
-    "      \   "filetypes": ["python", "python3", "djangohtml"],
-    "      \   "build": {
-    "      \     "mac": "pip install jedi",
-    "      \     "unix": "pip install jedi",
-    "      \   }
-    "      \ }}
-    NeoBundleLazy "davidhalter/jedi-vim", {
-			    \ "autoload": {
-			    \   "filetypes": ["python", "python3", "djangohtml"],
-			    \ },
-			    \ "build": {
-			    \   "mac": "pip install jedi",
-			    \   "unix": "pip install jedi",
-			    \ }}
-    let s:hooks = neobundle#get_hooks("jedi-vim")
-    function! s:hooks.on_source(bundle)
-	    " jediにvimの設定を任せると'completeopt+=preview'するので
-	    " 自動設定機能をOFFにし手動で設定を行う
-	    let g:jedi#auto_vim_configuration = 0
-	    " 補完の最初の項目が選択された状態だと使いにくいためオフにする
-	    let g:jedi#popup_select_first = 0
-	    " quickrunと被るため大文字に変更
-	    let g:jedi#rename_command = '<Leader>R'
-	    " gundoと被るため大文字に変更 (2013-06-24 10:00 追記）
-	    let g:jedi#goto_command = '<Leader>G'
-    endfunction
-
-    "前回のセッション回復
-    NeoBundle 'xolox/vim-session', {
-			    \ 'depends' : 'xolox/vim-misc',
-			    \ }
-    if isdirectory($MY_VIMRUNTIME . '/bundle/vim-session')
-      " 現在のディレクトリ直下の .vimsessions/ を取得 
-      let s:local_session_directory = xolox#misc#path#merge(getcwd(), '.vimsessions')
-      " 存在すれば
-      if isdirectory(s:local_session_directory)
-        " session保存ディレクトリをそのディレクトリの設定
-        let g:session_directory = s:local_session_directory
-        " vimを辞める時に自動保存
-        let g:session_autosave = 'yes'
-        " 引数なしでvimを起動した時にsession保存ディレクトリのdefault.vimを開く
-        let g:session_autoload = 'yes'
-        " 1分間に1回自動保存
-        let g:session_autosave_periodic = 1
-      else
-        let g:session_autosave = 'no'
-        let g:session_autoload = 'no'
-      endif
-      unlet s:local_session_directory
-    endif
-
-    "grepのヘルパー
-    NeoBundle 'fuenor/qfixgrep'
-
-    "デフォルトで使用する外部grep
-    set grepprg=grep
-
-    "grepに含めたくない拡張子
-    let MyGrep_ExcludeReg = '[~#]$\|\.dll$\|\.exe$\|\.lnk$\|\.o$\|\.obj$\|\.pdf$\|\.xls$'
-
-    "大文字、小文字を気にせずに検索する。
-    let g:MyGrepDefault_Ignorecase = 1
-
-    "カラースキーマ定義
-      " solarized カラースキーム
-      NeoBundle 'altercation/vim-colors-solarized'
-      " mustang カラースキーム
-      NeoBundle 'croaker/mustang-vim'
-      " wombat カラースキーム
-      NeoBundle 'jeffreyiacono/vim-colors-wombat'
-      " jellybeans カラースキーム
-      NeoBundle 'nanotech/jellybeans.vim'
-      " lucius カラースキーム
-      NeoBundle 'vim-scripts/Lucius'
-      " zenburn カラースキーム
-      NeoBundle 'vim-scripts/Zenburn'
-      " mrkn256 カラースキーム
-      NeoBundle 'mrkn/mrkn256.vim'
-      " railscasts カラースキーム
-      NeoBundle 'jpo/vim-railscasts-theme'
-      " pyte カラースキーム
-      NeoBundle 'therubymug/vim-pyte'
-      " molokai カラースキーム
-      NeoBundle 'tomasr/molokai'
-
-      " カラースキーム一覧表示に Unite.vim を使う
-      NeoBundle 'Shougo/unite.vim'
-      NeoBundle 'ujihisa/unite-colorscheme'
-
-      "デフォルトのカラースキーマ
-      set background=light
-      let g:solarized_contrast="hight"
-      let g:solarized_italic=0
-      colorscheme solarized
-
-
-    "NeoBundleここまで
-    " (ry
-
-    " インストールされていないプラグインのチェックおよびダウンロード
-    NeoBundleCheck
+  " インストールされていないプラグインのチェックおよびダウンロード
+  NeoBundleCheck
 endif
 
 " ファイルタイププラグインおよびインデントを有効化
