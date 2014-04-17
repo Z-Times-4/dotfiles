@@ -620,7 +620,7 @@ endif
 """"""""""""""""""""""""""""""
 if exists('+autochdir')
   "autochdirがある場合カレントディレクトリを移動
-  set autochdir
+  set noautochdir
 else
   "autochdirが存在しないが、カレントディレクトリを移動したい場合
   au BufEnter * execute ":silent! lcd " . escape(expand("%:p:h"), ' ')
