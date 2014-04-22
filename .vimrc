@@ -622,8 +622,8 @@ endif
 " grep,tagsのためカレントディレクトリをファイルと同じディレクトリに移動する
 """"""""""""""""""""""""""""""
 if exists('+autochdir')
-  "autochdirがある場合カレントディレクトリを移動
-  "set autochdir
+  "autochdirがある場合カレントディレクトリを移動しない
+  set noautochdir
 else
   "autochdirが存在しないが、カレントディレクトリを移動したい場合
   au BufEnter * execute ":silent! lcd " . escape(expand("%:p:h"), ' ')
@@ -866,6 +866,19 @@ else
 
   "大文字、小文字を気にせずに検索する。
   let g:MyGrepDefault_Ignorecase = 1
+
+  "PHP設定用
+  NeoBundle 'scrooloose/syntastic'
+  let g:syntastic_check_on_open = 1
+  let g:syntastic_enable_signs = 1
+  let g:syntastic_echo_current_error = 1
+  let g:syntastic_auto_loc_list = 2
+  let g:syntastic_enable_highlighting = 1
+  " なんでか分からないけど php コマンドのオプションを上書かないと動かなかった
+  let g:syntastic_php_php_args = '-l'
+  set statusline+=%#warningmsg#
+  set statusline+=%{SyntasticStatuslineFlag()}
+  set statusline+=%*
 
   "カラースキーマ定義
   " solarized カラースキーム
