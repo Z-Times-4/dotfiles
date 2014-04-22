@@ -70,6 +70,9 @@ endif
 " 編集設定
 "----------------------------------------
 
+if has('gui_macvim')
+    map ¥ <leader>
+endif
 
 if has('multi_byte_ime') || has('xim') || has('gui_macvim' || has('gui_running'))
   " Insert mode: lmap off, IME ON
@@ -620,7 +623,7 @@ endif
 """"""""""""""""""""""""""""""
 if exists('+autochdir')
   "autochdirがある場合カレントディレクトリを移動
-  set autochdir
+  "set autochdir
 else
   "autochdirが存在しないが、カレントディレクトリを移動したい場合
   au BufEnter * execute ":silent! lcd " . escape(expand("%:p:h"), ' ')
@@ -736,7 +739,7 @@ else
         \   "mappings": ['<Plug>(vimfiler_switch)'],
         \   "explorer": 1,
         \ }}
-  nnoremap <Leader>e :VimFilerExplorer<CR>
+  nnoremap <Leader>e :VimFilerExplorer  -split -no-quit -auto-cd<CR>
   " close vimfiler automatically when there are only vimfiler open
   autocmd MyAutoCmd BufEnter * if (winnr('$') == 1 && &filetype ==# 'vimfiler') | q | endif
   let s:hooks = neobundle#get_hooks("vimfiler")
@@ -887,7 +890,6 @@ else
   NeoBundle 'tomasr/molokai'
 
   " カラースキーム一覧表示に Unite.vim を使う
-  NeoBundle 'Shougo/unite.vim'
   NeoBundle 'ujihisa/unite-colorscheme'
 
   "デフォルトのカラースキーマ
