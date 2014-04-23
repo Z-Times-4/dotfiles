@@ -475,15 +475,6 @@ function! MakeTabLabel(n)
   return s
 endfunction
 
-"tabpagecdプラグイン替わり
-"command! -nargs=? TabpageCD
-"      \ execute 'cd' fnameescape(<q-args>) | let t:cwd = getcwd()
-
-"augroup tabpagecwd
-"  autocmd!
-"  autocmd TabEnter * if !exists('t:cwd') | let t:cwd = getcwd() | endif |
-"        \  execute 'TabpageCD' fnameescape(t:cwd)
-"augroup END
 
 "コピペ用
 vnoremap <silent> <C-p> "0p<CR>
@@ -855,7 +846,7 @@ else
     unlet s:local_session_directory
   endif
 
-  NeoBundle 'kana/vim-tabpagecd
+  NeoBundle 'kana/vim-tabpagecd'
 
 
   "grepのヘルパー
