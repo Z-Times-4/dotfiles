@@ -669,6 +669,7 @@ else
     " NeoCompleteを有効化
     "NeoCompleteEnable
   endfunction
+
   NeoBundleLazy 'Shougo/neosnippet.vim', {
         \ "autoload": {"insert": 1}}
   " 'GundoToggle'が呼ばれるまでロードしない
@@ -756,7 +757,44 @@ else
 
   "vimshell
   NeoBundle 'Shougo/vimshell'
+  let g:vimshell_no_default_keymappings = 1
 
+  autocmd FileType vimshell call s:vimshell_settings()
+  function! s:vimshell_settings()
+
+    " overwrite C-l
+    nmap  <buffer> <CR> <Plug>(vimshell_enter)
+    nmap <buffer> q <Plug>(vimshell_hide)
+    nmap <buffer> Q <Plug>(vimshell_exit)
+    nmap <buffer> <C-p> <Plug>(vimshell_previous_prompt)
+    nmap <buffer> <C-n> <Plug>(vimshell_next_prompt)
+    nmap <buffer> <C-k> <Plug>(vimshell_delete_previous_output)
+    nmap <buffer> <C-y> <Plug>(vimshell_paste_prompt)
+    nmap <buffer> E <Plug>(vimshell_move_end_argument)
+    nmap <buffer> cc <Plug>(vimshell_change_line)
+    nmap <buffer> dd <Plug>(vimshell_delete_line)
+    nmap <buffer> I <Plug>(vimshell_insert_head)
+    nmap <buffer> A <Plug>(vimshell_append_end)
+    nmap <buffer> i <Plug>(vimshell_insert_enter)
+    nmap <buffer> a <Plug>(vimshell_append_enter)
+    nmap <buffer> ^ <Plug>(vimshell_move_head)
+    "nmap  <C-c>     <Plug>(vimshell_hangup)
+    "nmap  <C-l>     <Plug>(vimshell_clear)
+    nmap  <buffer> <C-z> <Plug>(vimshell_execute_by_background)
+  imap  <buffer> <CR> <Plug>(vimshell_enter)
+  inoremap  <buffer> <buffer> <expr><silent> <C-l>  unite#sources#vimshell_history#start_complete(1)
+  imap <buffer> <TAB> <Plug>(vimshell_command_complete)
+  imap <buffer> <C-a> <Plug>(vimshell_move_head)
+  imap <buffer> <C-u> <Plug>(vimshell_delete_backward_line)
+  imap <buffer> <C-w> <Plug>(vimshell_delete_backward_word)
+  imap <buffer> <C-t> <Plug>(vimshell_insert_last_word)
+  imap <buffer> <C-x><C-h> <Plug>(vimshell_run_help)
+  "imap  <C-c>     <Plug>(vimshell_interrupt)
+  imap <buffer> <C-h> <Plug>(vimshell_delete_backward_char)
+  imap <buffer> <BS> <Plug>(vimshell_delete_backward_char)
+  imap <buffer> <C-k> <Plug>(vimshell_delete_forward_line)
+  imap <buffer> <C-x> <Plug>(vimshell_move_previous_window)
+  endfunction
 
   "テキスト編集関係
   NeoBundle 'tpope/vim-surround'
