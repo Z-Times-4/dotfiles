@@ -691,10 +691,10 @@ else
     " " Close popup by <Space>.
     inoremap <expr><Space> pumvisible() ? neocomplete#close_popup() : "\<Space>"
 
-        if !exists('g:neocomplete#keyword_patterns')
-                  let g:neocomplete#keyword_patterns = {}
-                      endif
-                          let g:neocomplete#keyword_patterns._ = '\h\w*'
+    if !exists('g:neocomplete#keyword_patterns')
+      let g:neocomplete#keyword_patterns = {}
+    endif
+    let g:neocomplete#keyword_patterns._ = '\h\w*'
   endfunction
 
 
@@ -803,14 +803,14 @@ else
     nmap <buffer> dd <Plug>(vimshell_delete_line)
     nmap <buffer> I <Plug>(vimshell_insert_head)
     nmap <buffer> A <Plug>(vimshell_append_end)
-    nmap <buffer> i <Plug>(vimshell_insert_enter)
+    nmap <buffer> i <Plug>(limshell_insert_enter)
     nmap <buffer> a <Plug>(vimshell_append_enter)
     nmap <buffer> ^ <Plug>(vimshell_move_head)
     "nmap  <C-c>     <Plug>(vimshell_hangup)
     "nmap  <C-l>     <Plug>(vimshell_clear)
     nmap  <buffer> <C-z> <Plug>(vimshell_execute_by_background)
   imap  <buffer> <CR> <Plug>(vimshell_enter)
-  inoremap  <buffer> <buffer> <expr><silent> <C-l>  unite#sources#vimshell_history#start_complete(1)
+   imap <expr> <buffer> <C-l> pumvisible() ? "\<C-n>" : "\<Plug>(vimshell_history_neocomplete)"
   imap <buffer> <TAB> <Plug>(vimshell_command_complete)
   imap <buffer> <C-a> <Plug>(vimshell_move_head)
   imap <buffer> <C-u> <Plug>(vimshell_delete_backward_line)
