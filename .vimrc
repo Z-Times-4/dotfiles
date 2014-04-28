@@ -683,7 +683,7 @@ else
     inoremap <expr><C-l>     neocomplete#complete_common_string()
     " <TAB>: completion.
     inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
-    " <C-h>, <BS>: close popup and delete backword char.
+    " <C-h>, <BS>: closels popup and delete backword char.
     inoremap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
     inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
     inoremap <expr><C-y>  neocomplete#close_popup()
@@ -796,7 +796,8 @@ else
     nmap <buffer> Q <Plug>(vimshell_exit)
     nmap <buffer> <C-p> <Plug>(vimshell_previous_prompt)
     nmap <buffer> <C-n> <Plug>(vimshell_next_prompt)
-    nmap <buffer> <C-k> <Plug>(vimshell_delete_previous_output)
+    nmap <buffer> <C-S-k> <Plug>(vimshell_delete_previous_output)
+    nmap <buffer> <C-k> <C-w>k
     nmap <buffer> <C-y> <Plug>(vimshell_paste_prompt)
     nmap <buffer> E <Plug>(vimshell_move_end_argument)
     nmap <buffer> cc <Plug>(vimshell_change_line)
