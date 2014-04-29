@@ -144,6 +144,9 @@ set ambiwidth=double
 set wildmenu
 set wildmode=list:longest,full
 
+"自動改行を無効にする
+set tw=0
+
 " マウスを有効にする
 if has('mouse')
   set mouse=a
