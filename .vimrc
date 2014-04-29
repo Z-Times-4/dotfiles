@@ -71,7 +71,7 @@ endif
 "----------------------------------------
 
 if has('gui_macvim')
-    map ¥ <leader>
+  map ¥ <leader>
 endif
 
 if has('multi_byte_ime') || has('xim') || has('gui_macvim' || has('gui_running'))
@@ -695,6 +695,8 @@ else
       let g:neocomplete#keyword_patterns = {}
     endif
     let g:neocomplete#keyword_patterns._ = '\h\w*'
+
+    "NeoCompleteEnable
   endfunction
 
 
@@ -786,7 +788,8 @@ else
   "vimshell
   NeoBundle 'Shougo/vimshell'
   let g:vimshell_no_default_keymappings = 1
-
+  let g:vimshell_prompt_expr = 'getcwd()." > "'
+  let g:vimshell_prompt_pattern = '^\f\+ > '
   autocmd FileType vimshell call s:vimshell_settings()
   function! s:vimshell_settings()
 
@@ -807,22 +810,22 @@ else
     nmap <buffer> i <Plug>(limshell_insert_enter)
     nmap <buffer> a <Plug>(vimshell_append_enter)
     nmap <buffer> ^ <Plug>(vimshell_move_head)
-    "nmap  <C-c>     <Plug>(vimshell_hangup)
-    "nmap  <C-l>     <Plug>(vimshell_clear)
+    nmap <buffer> <C-c> <Plug>(vimshell_interrupt) 
+    "nmap <buffer> <C-l> <Plug>(vimshell_clear)
     nmap  <buffer> <C-z> <Plug>(vimshell_execute_by_background)
-  imap  <buffer> <CR> <Plug>(vimshell_enter)
-   imap <expr> <buffer> <C-l> pumvisible() ? "\<C-n>" : "\<Plug>(vimshell_history_neocomplete)"
-  imap <buffer> <TAB> <Plug>(vimshell_command_complete)
-  imap <buffer> <C-a> <Plug>(vimshell_move_head)
-  imap <buffer> <C-u> <Plug>(vimshell_delete_backward_line)
-  imap <buffer> <C-w> <Plug>(vimshell_delete_backward_word)
-  imap <buffer> <C-t> <Plug>(vimshell_insert_last_word)
-  imap <buffer> <C-x><C-h> <Plug>(vimshell_run_help)
-  "imap  <C-c>     <Plug>(vimshell_interrupt)
-  imap <buffer> <C-h> <Plug>(vimshell_delete_backward_char)
-  imap <buffer> <BS> <Plug>(vimshell_delete_backward_char)
-  imap <buffer> <C-k> <Plug>(vimshell_delete_forward_line)
-  imap <buffer> <C-x> <Plug>(vimshell_move_previous_window)
+    imap  <buffer> <CR> <Plug>(vimshell_enter)
+    imap <expr> <buffer> <C-l> pumvisible() ? "\<C-n>" : "\<Plug>(vimshell_history_neocomplete)"
+    imap <buffer> <TAB> <Plug>(vimshell_command_complete)
+    imap <buffer> <C-a> <Plug>(vimshell_move_head)
+    imap <buffer> <C-u> <Plug>(vimshell_delete_backward_line)
+    imap <buffer> <C-w> <Plug>(vimshell_delete_backward_word)
+    imap <buffer> <C-t> <Plug>(vimshell_insert_last_word)
+    imap <buffer> <C-x><C-h> <Plug>(vimshell_run_help)
+    imap <buffer> <C-c> <Plug>(vimshell_interrupt)
+    imap <buffer> <C-h> <Plug>(vimshell_delete_backward_char)
+    imap <buffer> <BS> <Plug>(vimshell_delete_backward_char)
+    imap <buffer> <C-k> <Plug>(vimshell_delete_forward_line)
+    imap <buffer> <C-x> <Plug>(vimshell_move_previous_window)
   endfunction
 
   "テキスト編集関係
@@ -1109,10 +1112,10 @@ else
     endif
   endfunction
 
-augroup SwitchSetting
-  autocmd!
-  autocmd Filetype * if !empty(split(&ft, '\.')) | call <SID>define_switch_mappings() | endif
-augroup END
+  augroup SwitchSetting
+    autocmd!
+    autocmd Filetype * if !empty(split(&ft, '\.')) | call <SID>define_switch_mappings() | endif
+  augroup END
 
   "grepのヘルパー
   NeoBundle 'fuenor/qfixgrep'
