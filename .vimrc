@@ -790,6 +790,10 @@ else
 
   "vimshell
   NeoBundle 'Shougo/vimshell'
+
+ nmap <Leader>v :sp<cr><c-w><c-w>:VimShell<cr>
+ nmap <Leader>v :vs<cr><c-j><c-j>:VimShell<cr>
+
   let g:vimshell_no_default_keymappings = 1
   let g:vimshell_prompt_expr = 'getcwd()." > "'
   let g:vimshell_prompt_pattern = '^\f\+ > '
@@ -945,10 +949,6 @@ else
         \     'rails/stylesheet', 'rails/view'
         \   ]
         \ }}
-
-  NeoBundleLazy 'taka84u9/vim-ref-ri', {
-        \ 'depends': ['Shougo/unite.vim', 'thinca/vim-ref'],
-        \ 'autoload': { 'filetypes': g:my.ft.ruby_files } }
 
   NeoBundleLazy 'alpaca-tc/neorspec.vim', {
         \ 'depends' : ['alpaca-tc/vim-rails', 'tpope/vim-dispatch'],
