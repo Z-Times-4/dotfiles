@@ -145,7 +145,7 @@ set wildmenu
 set wildmode=list:longest,full
 
 "自動改行を無効にする
-set tw=0
+autocmd BufWinEnter * setlocal textwidth=0
 
 " マウスを有効にする
 if has('mouse')
@@ -620,9 +620,10 @@ if exists('+autochdir')
   set noautochdir
 else
   "autochdirが存在しないが、カレントディレクトリを移動したい場合
-  au BufEnter * execute ":silent! lcd " . escape(expand("%:p:h"), ' ')
 endif
 
+"ファイル読み込み時にタブのディレクトリを移動
+  au BufEnter * execute ":lcd " . substitute(expand("%:p:h")," ","\\\\ ","g")
 "----------------------------------------
 " 各種プラグイン設定
 "----------------------------------------
@@ -705,6 +706,8 @@ else
 
   NeoBundleLazy 'Shougo/neosnippet.vim', {
         \ "autoload": {"insert": 1}}
+  NeoBundleLazy "Shougo/neosnippet-snippets", {
+        \ "autoload": {"insert": 1}}      
   " 'GundoToggle'が呼ばれるまでロードしない
   NeoBundleLazy 'sjl/gundo.vim', {
         \ "autoload": {"commands": ["GundoToggle"]}}
@@ -792,7 +795,7 @@ else
   NeoBundle 'Shougo/vimshell'
 
  nmap <Leader>v :sp<cr><c-w><c-w>:VimShell<cr>
- nmap <Leader>v :vs<cr><c-j><c-j>:VimShell<cr>
+ nmap <Leader>V :vs<cr><c-l><c-l>:VimShell<cr>
 
   let g:vimshell_no_default_keymappings = 1
   let g:vimshell_prompt_expr = 'getcwd()." > "'
