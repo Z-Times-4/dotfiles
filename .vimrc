@@ -623,7 +623,7 @@ else
 endif
 
 "ファイル読み込み時にタブのディレクトリを移動
-  au BufEnter * execute ":lcd " . substitute(expand("%:p:h")," ","\\\\ ","g")
+  au BufEnter * execute ":lcd " . substitute((isdirectory(expand("%:p:h")) ? expand("%:p:h") : "")," ","\\\\ ","g")
 "----------------------------------------
 " 各種プラグイン設定
 "----------------------------------------
@@ -936,9 +936,10 @@ else
         \   'insert' : 1,
         \ }}
 
-  NeoBundleLazy 'edsono/vim-matchit', { 'autoload' : {
-        \ 'filetypes': 'ruby',
-        \ 'mappings' : ['nx', '%'] }}
+  
+  " NeoBundleLazy 'edsono/vim-matchit', { 'autoload' : {
+  "       \ 'filetypes': 'ruby',
+  "       \ 'mappings' : ['nx', '%'] }}
 
   NeoBundleLazy 'basyura/unite-rails', {
         \ 'depends' : 'Shougo/unite.vim',
