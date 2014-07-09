@@ -12,8 +12,8 @@ augroup MyAutoCmd
 augroup END
 
 
+set fileencodings=utf-8,iso-2022-jp,cp932,sjis,euc-jp
 set encoding=utf-8
-set fileencodings=iso-2022-jp,cp932,sjis,euc-jp,utf-8
 set nocompatible
 scriptencoding utf-8
 " scriptencodingと、このファイルのエンコーディングが一致するよう注意！
