@@ -290,6 +290,9 @@ endif
 if has('win32')
   let g:vimproc_dll_path = $MY_VIMRUNTIME . '/bundle/vimproc/autoload/vimproc_win32.dll'
 endif
+if has('win64')
+  let g:vimproc_dll_path = $MY_VIMRUNTIME . '/bundle/vimproc/autoload/vimproc_win64.dll'
+endif
 
 " 現バッファの差分表示(変更箇所の表示)
 command! DiffOrig vert new | set bt=nofile | r # | 0d_ | diffthis | wincmd p | diffthis
