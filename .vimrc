@@ -490,8 +490,7 @@ set expandtab
 set tabstop=2
 set shiftwidth=2
 
-"折りたたみ方法をインデントに指定
-set foldmethod=indent
+set foldmethod=marker
 set foldcolumn=3
 set foldlevel=100
 
