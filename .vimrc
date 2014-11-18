@@ -146,7 +146,7 @@ set wildmode=list:longest,full
 
 "自動改行を無効にする
 autocmd BufWinEnter * setlocal textwidth=0
-set textwidth = 0
+set textwidth=0
 
 " マウスを有効にする
 if has('mouse')
@@ -724,6 +724,7 @@ else
         \ "autoload": {
         \   "commands": ["Unite", "UniteWithBufferDir"]
         \ }}
+  NeoBundle "Shougo/neossh.vim"
 
   "unite設定
   NeoBundleLazy 'h1mesuke/unite-outline', {
@@ -1149,6 +1150,8 @@ else
   NeoBundle 'kana/vim-filetype-haskell'
   autocmd FileType haskell setlocal omnifunc=necoghc#omnifunc
   "}}}
+  NeoBundle "ujihisa/vimshell-ssh"
+
 
 
   "カラースキーマ定義
