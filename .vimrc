@@ -146,6 +146,7 @@ set wildmode=list:longest,full
 
 "自動改行を無効にする
 autocmd BufWinEnter * setlocal textwidth=0
+set textwidth = 0
 
 " マウスを有効にする
 if has('mouse')
@@ -625,7 +626,7 @@ else
 endif
 
 "ファイル読み込み時にタブのディレクトリを移動
-  au BufEnter * execute ":lcd " . substitute((isdirectory(expand("%:p:h")) ? expand("%:p:h") : "")," ","\\\\ ","g")
+au BufEnter * execute ":lcd " . substitute((isdirectory(expand("%:p:h")) ? expand("%:p:h") : "")," ","\\\\ ","g")
 "----------------------------------------
 " 各種プラグイン設定
 "----------------------------------------
@@ -796,8 +797,8 @@ else
   "vimshell
   NeoBundle 'Shougo/vimshell'
 
- nmap <Leader>v :sp<cr><c-w><c-w>:VimShell<cr>
- nmap <Leader>V :vs<cr><c-l><c-l>:VimShell<cr>
+  nmap <Leader>v :sp<cr><c-w><c-w>:VimShell<cr>
+  nmap <Leader>V :vs<cr><c-l><c-l>:VimShell<cr>
 
   let g:vimshell_no_default_keymappings = 1
   let g:vimshell_prompt_expr = 'getcwd()." > "'
@@ -938,7 +939,7 @@ else
         \   'insert' : 1,
         \ }}
 
-  
+
   " NeoBundleLazy 'edsono/vim-matchit', { 'autoload' : {
   "       \ 'filetypes': 'ruby',
   "       \ 'mappings' : ['nx', '%'] }}
@@ -1137,6 +1138,18 @@ else
 
   "大文字、小文字を気にせずに検索する。
   let g:MyGrepDefault_Ignorecase = 1
+
+  " for Haskell {{{
+  
+  "便利なghcmodなるコマンドをvimから便利に使うためのプラグイン
+  NeoBundle 'eagletmt/ghcmod-vim'
+  "補完用
+  NeoBundle 'eagletmt/neco-ghc'
+  "インデントを賢くしてくれる
+  NeoBundle 'kana/vim-filetype-haskell'
+  autocmd FileType haskell setlocal omnifunc=necoghc#omnifunc
+  "}}}
+
 
   "カラースキーマ定義
   " solarized カラースキーム
