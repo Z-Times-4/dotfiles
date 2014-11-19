@@ -345,10 +345,6 @@ nnoremap g# g#zz
 " vを二回で行末まで選択
 vnoremap v $h
 
-" TABにて対応ペアにジャンプ
-nnoremap <Tab> %
-vnoremap <Tab> %
-
 " Ctrl + hjkl でウィンドウ間を移動
 nnoremap <C-h> <C-w>h
 nnoremap <C-j> <C-w>j
@@ -372,9 +368,10 @@ nnoremap <silent> [toggle]w :setl wrap!<CR>:setl wrap?<CR>
 "タブ移動関連 
 nnoremap <C-Tab> gt
 nnoremap <C-S-Tab> gT
+nnoremap <S-tab> gt
+nnoremap <tab><tab> gT
 
-
-"プレフィックス
+  "プレフィックス
 nnoremap t; t
 nnoremap t <Nop>
 
