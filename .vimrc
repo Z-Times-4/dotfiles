@@ -134,6 +134,8 @@ set timeout timeoutlen=3000 ttimeoutlen=100
 set history=50
 " 日本語の行の連結時には空白を入力しない
 set formatoptions+=mM
+" 改行をしない
+set formatoptions-=tc
 " Visual blockモードでフリーカーソルを有効にする
 set whichwrap=b,s,[,],<,>
 " バックスペースでインデントや改行を削除できるようにする
@@ -145,8 +147,10 @@ set wildmenu
 set wildmode=list:longest,full
 
 "自動改行を無効にする
-autocmd BufWinEnter * setlocal textwidth=0
+autocmd BufRead * set textwidth=0
 set textwidth=0
+set tw=0
+autocmd FileType text setlocal textwidth=0
 
 " マウスを有効にする
 if has('mouse')
@@ -872,7 +876,7 @@ else
   let s:hooks = neobundle#get_hooks("vim-quickrun")
   function! s:hooks.on_source(bundle)
     let g:quickrun_config = {
-          \ "*": {"runner": "remote/vimproc"},
+          \ "*": {"runner": "vimproc"},
           \ }
   endfunction
   "Python補完
