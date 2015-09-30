@@ -101,10 +101,10 @@ set backspace=indent,eol,start
 " 'unnamedplus'が存在しているかどうかで設定を分ける必要がある
 if has('unnamedplus')
   " set clipboard& clipboard+=unnamedplus " 2013-07-03 14:30 unnamed 追加
-  set clipboard& clipboard+=unnamedplus,unnamed 
+  set clipboard+=unnamedplus,unnamed 
 else
   " set clipboard& clipboard+=unnamed,autoselect 2013-06-24 10:00 autoselect 削除
-  set clipboard& clipboard+=unnamed
+  set clipboard+=unnamed
 endif
 
 
@@ -639,9 +639,9 @@ if !isdirectory(s:neobundle_root) || v:version < 702
 else
   " NeoBundleを'runtimepath'に追加し初期化を行う
   if has('vim_starting')
-    execute "set runtimepath+=" . s:neobundle_root
+    set runtimepath+=~/.vim/bundle/neobundle.vim/
   endif
-  call neobundle#rc(s:bundle_root)
+  call neobundle#begin(expand('~/.vim/bundle/'))
 
   " NeoBundle自身をNeoBundleで管理させる
   NeoBundleFetch 'Shougo/neobundle.vim'
@@ -649,7 +649,9 @@ else
   "タブで開けるように設定
   if has('clientserver')
     NeoBundle 'thinca/vim-singleton'
-    call singleton#enable()
+    if isdirectory(s:bundle_root . 'vim-singleton')
+      call singleton#enable()
+    endif
   endif
 
   " 非同期通信を可能にする
@@ -851,7 +853,7 @@ else
   function! s:hooks.on_source(bundle)
     let g:indent_guides_guide_size = 1
     if isdirectory($MY_VIMRUNTIME . '/bundle/vim-indent-guides')
-      IndentGuidesEnable " 2013-06-24 10:00 追記
+      autocmd VimEnter * :IndentGuidesEnable
     endif
   endfunction
 
@@ -874,22 +876,7 @@ else
           \ }
   endfunction
   "Python補完
-  "NeoBundleLazy "davidhalter/jedi-vim", {
-  "      \ "autoload": {
-  "      \   "filetypes": ["python", "python3", "djangohtml"],
-  "      \   "build": {
-  "      \     "mac": "pip install jedi",
-  "      \     "unix": "pip install jedi",
-  "      \   }
-  "      \ }}
-  NeoBundleLazy "davidhalter/jedi-vim", {
-        \ "autoload": {
-        \   "filetypes": ["python", "python3", "djangohtml"],
-        \ },
-        \ "build": {
-        \   "mac": "pip install jedi",
-        \   "unix": "pip install jedi",
-        \ }}
+  NeoBundle "davidhalter/jedi-vim"
   let s:hooks = neobundle#get_hooks("jedi-vim")
   function! s:hooks.on_source(bundle)
     " jediにvimの設定を任せると'completeopt+=preview'するので
@@ -909,7 +896,9 @@ else
         \ }
   if isdirectory($MY_VIMRUNTIME . '/bundle/vim-session')
     " 現在のディレクトリ直下の .vimsessions/ を取得 
-    let s:local_session_directory = xolox#misc#path#merge(getcwd(), '.vimsessions')
+    " let s:local_session_directory = xolox#misc#path#merge(getcwd(), '.vimsessions')
+    let s:local_session_directory = getcwd() .'/'. '.vimsessions'
+    
     " 存在すれば
     if isdirectory(s:local_session_directory)
       " session保存ディレクトリをそのディレクトリの設定
@@ -1180,9 +1169,12 @@ else
   set background=light
   let g:solarized_contrast="hight"
   let g:solarized_italic=0
-  colorscheme solarized
+  if isdirectory(s:bundle_root . 'vim-colors-solarized')
+    colorscheme solarized
+  endif
 
 
+  cal neobundle#end()
   "NeoBundleここまで
   " (ry
 
