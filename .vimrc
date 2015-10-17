@@ -1142,6 +1142,11 @@ else
   "}}}
   NeoBundle "ujihisa/vimshell-ssh"
 
+  "git log確認
+  NeoBundle 'cohama/agit.vim'
+
+  "git commit関連
+  NeoBundle 'tpope/vim-fugitive'
 
 
   "カラースキーマ定義
