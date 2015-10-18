@@ -1,3 +1,5 @@
+" todo gitからtchしfugitiveでcommitしpushしてマージ
+
 
 "=============================================================================
 "    Description: .vimrcサンプル設定
@@ -151,6 +153,9 @@ autocmd BufRead * set textwidth=0
 set textwidth=0
 set tw=0
 autocmd FileType text setlocal textwidth=0
+
+autocmd BufRead .vimrc set filetype=vim
+autocmd BufRead .vimrc set syntax=vim
 
 " マウスを有効にする
 if has('mouse')
@@ -851,15 +856,15 @@ else
   NeoBundle 'vim-scripts/YankRing.vim'
 
   "インデント可視化
-  NeoBundle "nathanaelkane/vim-indent-guides"
-  " let g:indent_guides_enable_on_vim_startup = 1 2013-06-24 10:00 削除
-  let s:hooks = neobundle#get_hooks("vim-indent-guides")
-  function! s:hooks.on_source(bundle)
-    let g:indent_guides_guide_size = 1
-    if isdirectory($MY_VIMRUNTIME . '/bundle/vim-indent-guides')
-      autocmd VimEnter * :IndentGuidesEnable
-    endif
-  endfunction
+ " NeoBundle "nathanaelkane/vim-indent-guides"
+ " " let g:indent_guides_enable_on_vim_startup = 1 2013-06-24 10:00 削除
+ " let s:hooks = neobundle#get_hooks("vim-indent-guides")
+ " function! s:hooks.on_source(bundle)
+ "   let g:indent_guides_guide_size = 1
+ "   if isdirectory($MY_VIMRUNTIME . '/bundle/vim-indent-guides')
+ "     autocmd VimEnter * :IndentGuidesEnable
+ "   endif
+ " endfunction
 
   "todo設定
   NeoBundleLazy "sjl/gundo.vim", {
@@ -1173,6 +1178,8 @@ else
   set background=light
   let g:solarized_contrast="hight"
   let g:solarized_italic=0
+  let g:solarized_termcolors=256
+  let g:solarized_termtrans=1
   if isdirectory(s:bundle_root . 'vim-colors-solarized')
     colorscheme solarized
   endif
@@ -1185,6 +1192,8 @@ else
   " インストールされていないプラグインのチェックおよびダウンロード
   NeoBundleCheck
 endif
+
+colorscheme solarized
 
 " ファイルタイププラグインおよびインデントを有効化
 " これはNeoBundleによる処理が終了したあとに呼ばなければならない
