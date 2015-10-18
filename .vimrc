@@ -1,13 +1,3 @@
-" todo gitからtchしfugitiveでcommitしpushしてマージ
-
-
-"=============================================================================
-"    Description: .vimrcサンプル設定
-"         Author: anonymous
-"  Last Modified: 0000-00-00 00:00
-"        Version: 7.40
-"=============================================================================
-
 " release autogroup in MyAutoCmd
 augroup MyAutoCmd
   autocmd!
