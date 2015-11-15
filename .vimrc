@@ -146,7 +146,7 @@ autocmd FileType text setlocal textwidth=0
 
 autocmd BufRead .vimrc set filetype=vim
 autocmd BufRead .vimrc set syntax=vim
-autocmd BufRead .hs set filetype=haskell
+autocmd BufNewFile,BufRead *.hs set filetype=haskell
 
 " マウスを有効にする
 if has('mouse')
