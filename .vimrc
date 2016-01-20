@@ -33,34 +33,6 @@ endif
 
 "au BufEnter * execute 'lcd ' fnameescape(expand('%:p:h'))
 
-" ランタイムパスを通す必要のあるプラグインを使用する場合、
-" $MY_VIMRUNTIMEを使用すると Windows/Linuxで切り分ける必要が無くなります。
-" 例) vimfiles/qfixapp (Linuxでは~/.vim/qfixapp)にランタイムパスを通す場合
-" set runtimepath+=$MY_VIMRUNTIME/qfixapp
-
-"----------------------------------------
-" 内部エンコーディング指定
-"----------------------------------------
-" 内部エンコーディングのUTF-8化と文字コードの自動認識設定をencode.vimで行う。
-" オールインワンパッケージの場合 vimrcで設定されます。
-" エンコーディング指定や文字コードの自動認識設定が適切に設定されている場合、
-" 次行の encode.vim読込部分はコメントアウトして下さい。
-" silent! source $MY_VIMRUNTIME/pluginjp/encode.vim
-" scriptencodingと異なる内部エンコーディングに変更する場合、
-" 変更後にもscriptencodingを指定しておくと問題が起きにくくなります。
-" scriptencoding cp932
-
-"----------------------------------------
-" システム設定
-"----------------------------------------
-" mswin.vimを読み込む
-" source $VIMRUNTIME/mswin.vim
-" behave mswin
-
-
-"----------------------------------------
-" 編集設定
-"----------------------------------------
 
 if has('gui_macvim')
   map ¥ <leader>
@@ -157,10 +129,14 @@ endif
 " pluginを使用可能にする
 filetype plugin indent on
 
+if !has('gui_running')
+  set notimeout
+  set ttimeout
+  set timeoutlen=100
+endif
 
-"----------------------------------------
-" 検索
-"----------------------------------------
+
+" 検索 {{{
 " 検索の時に大文字小文字を区別しない
 " ただし大文字小文字の両方が含まれている場合は大文字小文字を区別する
 set ignorecase
@@ -180,10 +156,9 @@ set hlsearch
 cnoremap <expr> / getcmdtype() == '/' ? '\/' : '/'
 cnoremap <expr> ? getcmdtype() == '?' ? '\?' : '?'
 
+" }}}
 
-"----------------------------------------
-" 表示設定
-"----------------------------------------
+" 表示設定 {{{
 
 set guioptions-=T
 set guioptions-=m
@@ -265,9 +240,10 @@ function! s:Byte2hex(bytes)
   return join(map(copy(a:bytes), 'printf("%02X", v:val)'), '')
 endfunction
 
-"----------------------------------------
-" diff/patch
-"----------------------------------------
+" }}}
+
+" diff/patch {{{
+
 " diffの設定
 if has('win32') || has('win64')
   set diffexpr=MyDiff()
@@ -307,9 +283,9 @@ function! MyPatch()
   call system($VIM."\\'.'patch -o " . v:fname_out . " " . v:fname_in . " < " . v:fname_diff)
 endfunction
 
-"----------------------------------------
-" ノーマルモード
-"----------------------------------------
+"}}}
+
+" ノーマルモード {{{
 " ヘルプ検索
 nnoremap <F1> K
 " 現在開いているvimスクリプトファイルを実行
@@ -431,6 +407,16 @@ for n in range(1, 9)
   exe 'nnoremap <silent> t' . n ' :<C-u>tabnext ' . n . '<CR>'
 endfor
 
+" }}}
+
+" インサートモード {{{
+" IM起動時にカーソル入力が出来ない問題対応
+imap <ESC>OA <Up>
+imap <ESC>OB <Down>
+imap <ESC>OC <Right>
+imap <ESC>OD <Left>
+" }}}
+
 "タブ表示ラベル
 set tabline=%!MakeTabLine()
 
@@ -532,23 +518,6 @@ if filereadable(s:local_vimrc)
   execute 'source ' . s:local_vimrc
 endif
 
-
-
-"----------------------------------------
-" 挿入モード
-"----------------------------------------
-
-"----------------------------------------
-" ビジュアルモード
-"----------------------------------------
-
-"----------------------------------------
-" コマンドモード
-"----------------------------------------
-
-"----------------------------------------
-" Vimスクリプト
-"----------------------------------------
 """"""""""""""""""""""""""""""
 " ファイルを開いたら前回のカーソル位置へ移動
 " $VIMRUNTIME/vimrc_example.vim
