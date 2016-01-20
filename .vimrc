@@ -82,6 +82,7 @@ set hidden              " バッファを閉じる代わりに隠す（Undo履�
 set switchbuf=useopen   " 新しく開く代わりにすでに開いてあるバッファを開く
 set showmatch           " 対応する括弧などをハイライト表示する
 set matchtime=3         " 対応括弧のハイライト表示を3秒にする
+set noundofile          " .un~ファイルを無効化
 
 " 対応括弧に'<'と'>'のペアを追加
 set matchpairs& matchpairs+=<:>
