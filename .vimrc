@@ -1115,6 +1115,9 @@ else
   "git commit関連
   NeoBundle 'tpope/vim-fugitive'
 
+  "haskell
+  NeoBundle 'itchyny/vim-haskell-sort-import'
+
 
   "カラースキーマ定義
   " solarized カラースキーム
