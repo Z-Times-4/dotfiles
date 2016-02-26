@@ -1121,6 +1121,8 @@ else
   autocmd FileType haskell setlocal omnifunc=necoghc#omnifunc
   "importを半自動で書いてくれる
   NeoBundle 'dan-t/vim-hsimport'
+  "リファクタ
+  NeoBundle 'glittershark/vim-hare'
 
   let g:tagbar_type_haskell = {
     \ 'ctagsbin'  : 'hasktags',
