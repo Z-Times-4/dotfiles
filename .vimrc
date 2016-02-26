@@ -1145,7 +1145,7 @@ else
   NeoBundle 'ujihisa/unite-colorscheme'
 
   "デフォルトのカラースキーマ
-  set background=light
+  set background=dark
   let g:solarized_contrast="hight"
   let g:solarized_italic=0
   let g:solarized_termcolors=256
