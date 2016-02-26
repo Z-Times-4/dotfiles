@@ -55,6 +55,7 @@ set switchbuf=useopen   " 新しく開く代わりにすでに開いてあるバ
 set showmatch           " 対応する括弧などをハイライト表示する
 set matchtime=3         " 対応括弧のハイライト表示を3秒にする
 set noundofile          " .un~ファイルを無効化
+set tags=tags;/,codex.tags;/  " tagsの設定
 
 " 対応括弧に'<'と'>'のペアを追加
 set matchpairs& matchpairs+=<:>
@@ -1097,16 +1098,7 @@ else
   "大文字、小文字を気にせずに検索する。
   let g:MyGrepDefault_Ignorecase = 1
 
-  " for Haskell {{{
   
-  "便利なghcmodなるコマンドをvimから便利に使うためのプラグイン
-  NeoBundle 'eagletmt/ghcmod-vim'
-  "補完用
-  NeoBundle 'eagletmt/neco-ghc'
-  "インデントを賢くしてくれる
-  NeoBundle 'kana/vim-filetype-haskell'
-  autocmd FileType haskell setlocal omnifunc=necoghc#omnifunc
-  "}}}
   NeoBundle "ujihisa/vimshell-ssh"
 
   "git log確認
@@ -1115,8 +1107,52 @@ else
   "git commit関連
   NeoBundle 'tpope/vim-fugitive'
 
+  " tagsからアウトライン表示
+  NeoBundle 'majutsushi/tagbar'
+
   "haskell
   NeoBundle 'itchyny/vim-haskell-sort-import'
+  "便利なghcmodなるコマンドをvimから便利に使うためのプラグイン
+  NeoBundle 'eagletmt/ghcmod-vim'
+  "補完用
+  NeoBundle 'eagletmt/neco-ghc'
+  "インデントを賢くしてくれる
+  NeoBundle 'kana/vim-filetype-haskell'
+  autocmd FileType haskell setlocal omnifunc=necoghc#omnifunc
+  "importを半自動で書いてくれる
+  NeoBundle 'dan-t/vim-hsimport'
+
+  let g:tagbar_type_haskell = {
+    \ 'ctagsbin'  : 'hasktags',
+    \ 'ctagsargs' : '-x -c -o-',
+    \ 'kinds'     : [
+        \  'm:modules:0:1',
+        \  'd:data: 0:1',
+        \  'd_gadt: data gadt:0:1',
+        \  't:type names:0:1',
+        \  'nt:new types:0:1',
+        \  'c:classes:0:1',
+        \  'cons:constructors:1:1',
+        \  'c_gadt:constructor gadt:1:1',
+        \  'c_a:constructor accessors:1:1',
+        \  'ft:function types:1:1',
+        \  'fi:function implementations:0:1',
+        \  'o:others:0:1'
+    \ ],
+    \ 'sro'        : '.',
+    \ 'kind2scope' : {
+        \ 'm' : 'module',
+        \ 'c' : 'class',
+        \ 'd' : 'data',
+        \ 't' : 'type'
+    \ },
+    \ 'scope2kind' : {
+        \ 'module' : 'm',
+        \ 'class'  : 'c',
+        \ 'data'   : 'd',
+        \ 'type'   : 't'
+    \ }
+\ }
 
 
   "カラースキーマ定義
