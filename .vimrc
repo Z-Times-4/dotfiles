@@ -1124,7 +1124,8 @@ else
   "リファクタ
   NeoBundle 'glittershark/vim-hare'
   "シンタクスチェック
-  NeoBundle 'scrooloose/syntastic'
+  NeoBundle "osyo-manga/shabadou.vim"
+  NeoBundle "osyo-manga/vim-watchdogs"
 
   let g:tagbar_type_haskell = {
     \ 'ctagsbin'  : 'hasktags',
