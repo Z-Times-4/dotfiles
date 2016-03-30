@@ -1123,6 +1123,8 @@ else
   NeoBundle 'dan-t/vim-hsimport'
   "リファクタ
   NeoBundle 'glittershark/vim-hare'
+  "シンタクスチェック
+  NeoBundle 'scrooloose/syntastic'
 
   let g:tagbar_type_haskell = {
     \ 'ctagsbin'  : 'hasktags',
