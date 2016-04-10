@@ -1121,6 +1121,8 @@ else
   autocmd FileType haskell setlocal omnifunc=necoghc#omnifunc
   "importを半自動で書いてくれる
   NeoBundle 'dan-t/vim-hsimport'
+  autocmd FileType haskell nmap <silent> <F1> :silent update <bar> HsimportModule<CR>
+  autocmd FileType haskell nmap <silent> <F2> :silent update <bar> HsimportSymbol<CR>
   "リファクタ
   NeoBundle 'glittershark/vim-hare'
   "シンタクスチェック
