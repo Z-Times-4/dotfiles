@@ -1126,6 +1126,10 @@ else
   "シンタクスチェック
   NeoBundle "osyo-manga/shabadou.vim"
   NeoBundle "osyo-manga/vim-watchdogs"
+  "supercollider用
+  NeoBundle 'sbl/scvim'
+  "ウィンドウリサイズ
+  NeoBundle 'simeji/winresizer'
 
   let g:tagbar_type_haskell = {
     \ 'ctagsbin'  : 'hasktags',
