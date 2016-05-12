@@ -31,6 +31,16 @@ elseif isdirectory($VIM . '\vimfiles')
   let $MY_VIMRUNTIME = $VIM.'\vimfiles'
 endif
 
+if has('win32')
+  let g:vimproc_dll_path = $MY_VIMRUNTIME . '/bundle/vimproc/autoload/vimproc_win32.dll'
+endif
+if has('win64')
+  let g:vimproc_dll_path = $MY_VIMRUNTIME . '/bundle/vimproc/autoload/vimproc_win64.dll'
+endif
+
+let g:rc_dir=$MY_VIMRUNTIME . '/rc'
+
+
 "au BufEnter * execute 'lcd ' fnameescape(expand('%:p:h'))
 
 
@@ -267,13 +277,6 @@ if has('win32') || has('win64')
   endfunction
 endif
 
-if has('win32')
-  let g:vimproc_dll_path = $MY_VIMRUNTIME . '/bundle/vimproc/autoload/vimproc_win32.dll'
-endif
-if has('win64')
-  let g:vimproc_dll_path = $MY_VIMRUNTIME . '/bundle/vimproc/autoload/vimproc_win64.dll'
-endif
-
 " 現バッファの差分表示(変更箇所の表示)
 command! DiffOrig vert new | set bt=nofile | r # | 0d_ | diffthis | wincmd p | diffthis
 " ファイルまたはバッファ番号を指定して差分表示。#なら裏バッファと比較
@@ -484,6 +487,17 @@ set foldlevel=100
 " make, grep などのコマンド後に自動的にQuickFixを開く
 autocmd MyAutoCmd QuickfixCmdPost make,grep,grepadd,vimgrep copen
 
+" grep詳細設定
+"デフォルトで使用する外部grep
+set grepprg=grep
+
+"grepに含めたくない拡張子
+let MyGrep_ExcludeReg = '[~#]$\|\.dll$\|\.exe$\|\.lnk$\|\.o$\|\.obj$\|\.pdf$\|\.xls$'
+
+"大文字、小文字を気にせずに検索する。
+let g:MyGrepDefault_Ignorecase = 1
+
+
 " QuickFixおよびHelpでは q でバッファを閉じる
 autocmd MyAutoCmd FileType help,qf nnoremap <buffer> q <C-w>c
 
@@ -600,621 +614,132 @@ au BufEnter * execute ":lcd " . substitute((isdirectory(expand("%:p:h")) ? expan
 " 各種プラグイン設定
 "----------------------------------------
 
-filetype off
-let s:noplugin = 0
-let s:bundle_root = expand('$HOME/.vim/bundle')
-let s:neobundle_root = s:bundle_root . '/neobundle.vim'
-if !isdirectory(s:neobundle_root) || v:version < 702
-  " NeoBundleが存在しない、もしくはVimのバージョンが古い場合はプラグインを一切
-  " 読み込まない
-  let s:noplugin = 1
-else
-  " NeoBundleを'runtimepath'に追加し初期化を行う
-  if has('vim_starting')
-    set runtimepath+=~/.vim/bundle/neobundle.vim/
+"dein.vim設定
+" プラグインが実際にインストールされるディレクトリ
+let s:dein_dir = expand('~/.cache/dein')
+" dein.vim 本体
+let s:dein_repo_dir = s:dein_dir . '/repos/github.com/Shougo/dein.vim'
+
+" dein.vim がなければ github から落としてくる
+if &runtimepath !~# '/dein.vim'
+  if !isdirectory(s:dein_repo_dir)
+    execute '!git clone https://github.com/Shougo/dein.vim' s:dein_repo_dir
   endif
-  call neobundle#begin(expand('~/.vim/bundle/'))
-
-  " NeoBundle自身をNeoBundleで管理させる
-  NeoBundleFetch 'Shougo/neobundle.vim'
-
-  "タブで開けるように設定
-  if has('clientserver')
-    NeoBundle 'thinca/vim-singleton'
-    if isdirectory(s:bundle_root . 'vim-singleton')
-      call singleton#enable()
-    endif
-  endif
-
-  " 非同期通信を可能にする
-  " 'build'が指定されているのでインストール時に自動的に
-  " 指定されたコマンドが実行され vimproc がコンパイルされる
-  NeoBundle "Shougo/vimproc", {
-        \ "build": {
-        \   "windows"   : "make -f make_mingw32.mak",
-        \   "cygwin"    : "make -f make_cygwin.mak",
-        \   "mac"       : "make -f make_mac.mak",
-        \   "unix"      : "make -f make_unix.mak",
-        \ }}
-
-  NeoBundleLazy 'Shougo/neocomplete.vim', {
-        \ "autoload": {"insert": 1}}
-  " neocompleteのhooksを取得
-  let s:hooks = neobundle#get_hooks("neocomplete.vim")
-  " neocomplete用の設定関数を定義。下記関数はneocompleteロード時に実行される
-  function! s:hooks.on_source(bundle)
-    let g:acp_enableAtStartup = 0
-    " Use neocomplete.
-    let g:neocomplete#enable_at_startup = 1
-    " Use smartcase.
-    let g:neocomplete#enable_smart_case = 1
-    " Set minimum syntax keyword length.
-    let g:neocomplete#sources#syntax#min_keyword_length = 3
-    " Define dictionary.
-    let g:neocomplete#sources#dictionary#dictionaries = {
-          \ 'default' : '',
-          \ 'vimshell' : $MY_VIMRUNTIME.'/.vimshell_hist',
-          \ 'scheme' : $MY_VIMRUNTIME.'/.gosh_completions'
-          \ }
-    " Plugin key-mappings.
-    inoremap <expr><C-g>     neocomplete#undo_completion()
-    inoremap <expr><C-l>     neocomplete#complete_common_string()
-    " <TAB>: completion.
-    inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
-    " <C-h>, <BS>: closels popup and delete backword char.
-    inoremap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
-    inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
-    inoremap <expr><C-y>  neocomplete#close_popup()
-    inoremap <expr><C-e>  neocomplete#cancel_popup()
-    " " Close popup by <Space>.
-    inoremap <expr><Space> pumvisible() ? neocomplete#close_popup() : "\<Space>"
-
-    if !exists('g:neocomplete#keyword_patterns')
-      let g:neocomplete#keyword_patterns = {}
-    endif
-    let g:neocomplete#keyword_patterns._ = '\h\w*'
-
-    "NeoCompleteEnable
-  endfunction
-
-
-  NeoBundleLazy 'Shougo/neosnippet.vim', {
-        \ "autoload": {"insert": 1}}
-  NeoBundleLazy "Shougo/neosnippet-snippets", {
-        \ "autoload": {"insert": 1}}      
-  " 'GundoToggle'が呼ばれるまでロードしない
-  NeoBundleLazy 'sjl/gundo.vim', {
-        \ "autoload": {"commands": ["GundoToggle"]}}
-  " '<Plug>TaskList'というマッピングが呼ばれるまでロードしない
-  NeoBundleLazy 'vim-scripts/TaskList.vim', {
-        \ "autoload": {"mappings": ['<Plug>TaskList']}}
-  " HTMLが開かれるまでロードしない
-  NeoBundleLazy 'mattn/zencoding-vim', {
-        \ "autoload": {"filetypes": ['html']}}
-  NeoBundleLazy "Shougo/unite.vim", {
-        \ "autoload": {
-        \   "commands": ["Unite", "UniteWithBufferDir"]
-        \ }}
-  NeoBundle "Shougo/neossh.vim"
-
-  "unite設定
-  NeoBundleLazy 'h1mesuke/unite-outline', {
-        \ "autoload": {
-        \   "unite_sources": ["outline"],
-        \ }}
-  nnoremap [unite] <Nop>
-  nmap U [unite]
-  nnoremap <silent> [unite]f :<C-u>UniteWithBufferDir -buffer-name=files file<CR>
-  nnoremap <silent> [unite]b :<C-u>Unite buffer<CR>
-  nnoremap <silent> [unite]r :<C-u>Unite register<CR>
-  nnoremap <silent> [unite]m :<C-u>Unite file_mru<CR>
-  nnoremap <silent> [unite]c :<C-u>Unite bookmark<CR>
-  nnoremap <silent> [unite]o :<C-u>Unite outline<CR>
-  nnoremap <silent> [unite]t :<C-u>Unite tab<CR>
-  nnoremap <silent> [unite]w :<C-u>Unite window<CR>       
-
-  "現在のファイルをブックマークします。
-  nnoremap <silent> [unite]d :UniteBookmarkAdd<CR>
-
-
-  let s:hooks = neobundle#get_hooks("unite.vim")
-  function! s:hooks.on_source(bundle)
-    " start unite in insert mode
-    let g:unite_enable_start_insert = 1
-    " use vimfiler to open directory
-    call unite#custom_default_action("source/bookmark/directory", "vimfiler")
-    call unite#custom_default_action("directory", "vimfiler")
-    call unite#custom_default_action("directory_mru", "vimfiler")
-    autocmd MyAutoCmd FileType unite call s:unite_settings()
-    function! s:unite_settings()
-      imap <buffer> <Esc><Esc> <Plug>(unite_exit)
-      nmap <buffer> <Esc> <Plug>(unite_exit)
-      nmap <buffer> <C-n> <Plug>(unite_select_next_line)
-      nmap <buffer> <C-p> <Plug>(unite_select_previous_line)
-    endfunction
-  endfunction
-
-  "vimfiler設定
-  NeoBundleLazy "Shougo/vimfiler", {
-        \ "depends": ["Shougo/unite.vim"],
-        \ "autoload": {
-        \   "commands": ["VimFilerTab", "VimFiler", "VimFilerExplorer"],
-        \   "mappings": ['<Plug>(vimfiler_switch)'],
-        \   "explorer": 1,
-        \ }}
-  nnoremap <Leader>e :VimFilerExplorer  -split -no-quit -auto-cd<CR>
-  " close vimfiler automatically when there are only vimfiler open
-  autocmd MyAutoCmd BufEnter * if (winnr('$') == 1 && &filetype ==# 'vimfiler') | q | endif
-  let s:hooks = neobundle#get_hooks("vimfiler")
-  function! s:hooks.on_source(bundle)
-    let g:vimfiler_as_default_explorer = 1
-    let g:vimfiler_enable_auto_cd = 1
-
-    " .から始まるファイルおよび.pycで終わるファイルを不可視パターンに
-    " 2013-08-14 追記
-    let g:vimfiler_ignore_pattern = "\%(^\..*\|\.pyc$\)"
-
-    " vimfiler specific key mappings
-    autocmd MyAutoCmd FileType vimfiler call s:vimfiler_settings()
-    function! s:vimfiler_settings()
-      " ^^ to go up
-      nmap <buffer> ^^ <Plug>(vimfiler_switch_to_parent_directory)
-      " use R to refresh
-      nmap <buffer> R <Plug>(vimfiler_redraw_screen)
-      " overwrite C-l
-      nmap <buffer> <C-l> <C-w>l
-    endfunction
-  endfunction
-
-  "vimshell
-  NeoBundle 'Shougo/vimshell'
-
-  nmap <Leader>v :sp<cr><c-w><c-w>:VimShell<cr>
-  nmap <Leader>V :vs<cr><c-l><c-l>:VimShell<cr>
-
-  let g:vimshell_no_default_keymappings = 1
-  let g:vimshell_prompt_expr = 'getcwd()." > "'
-  let g:vimshell_prompt_pattern = '^\f\+ > '
-  autocmd FileType vimshell call s:vimshell_settings()
-  function! s:vimshell_settings()
-
-    " overwrite C-l
-    nmap  <buffer> <CR> <Plug>(vimshell_enter)
-    nmap <buffer> q <Plug>(vimshell_hide)
-    nmap <buffer> Q <Plug>(vimshell_exit)
-    nmap <buffer> <C-p> <Plug>(vimshell_previous_prompt)
-    nmap <buffer> <C-n> <Plug>(vimshell_next_prompt)
-    nmap <buffer> <C-S-k> <Plug>(vimshell_delete_previous_output)
-    nmap <buffer> <C-k> <C-w>k
-    nmap <buffer> <C-y> <Plug>(vimshell_paste_prompt)
-    nmap <buffer> E <Plug>(vimshell_move_end_argument)
-    nmap <buffer> cc <Plug>(vimshell_change_line)
-    nmap <buffer> dd <Plug>(vimshell_delete_line)
-    nmap <buffer> I <Plug>(vimshell_insert_head)
-    nmap <buffer> A <Plug>(vimshell_append_end)
-    nmap <buffer> i <Plug>(limshell_insert_enter)
-    nmap <buffer> a <Plug>(vimshell_append_enter)
-    nmap <buffer> ^ <Plug>(vimshell_move_head)
-    nmap <buffer> <C-c> <Plug>(vimshell_interrupt) 
-    "nmap <buffer> <C-l> <Plug>(vimshell_clear)
-    nmap  <buffer> <C-z> <Plug>(vimshell_execute_by_background)
-    imap  <buffer> <CR> <Plug>(vimshell_enter)
-    imap <expr> <buffer> <C-l> pumvisible() ? "\<C-n>" : "\<Plug>(vimshell_history_neocomplete)"
-    imap <buffer> <TAB> <Plug>(vimshell_command_complete)
-    imap <buffer> <C-a> <Plug>(vimshell_move_head)
-    imap <buffer> <C-u> <Plug>(vimshell_delete_backward_line)
-    imap <buffer> <C-w> <Plug>(vimshell_delete_backward_word)
-    imap <buffer> <C-t> <Plug>(vimshell_insert_last_word)
-    imap <buffer> <C-x><C-h> <Plug>(vimshell_run_help)
-    imap <buffer> <C-c> <Plug>(vimshell_interrupt)
-    imap <buffer> <C-h> <Plug>(vimshell_delete_backward_char)
-    imap <buffer> <BS> <Plug>(vimshell_delete_backward_char)
-    imap <buffer> <C-k> <Plug>(vimshell_delete_forward_line)
-    imap <buffer> <C-x> <Plug>(vimshell_move_previous_window)
-  endfunction
-
-  "テキスト編集関係
-  NeoBundle 'tpope/vim-surround'
-  NeoBundle 'vim-scripts/Align'
-  NeoBundle 'vim-scripts/YankRing.vim'
-
-  "インデント可視化
- " NeoBundle "nathanaelkane/vim-indent-guides"
- " " let g:indent_guides_enable_on_vim_startup = 1 2013-06-24 10:00 削除
- " let s:hooks = neobundle#get_hooks("vim-indent-guides")
- " function! s:hooks.on_source(bundle)
- "   let g:indent_guides_guide_size = 1
- "   if isdirectory($MY_VIMRUNTIME . '/bundle/vim-indent-guides')
- "     autocmd VimEnter * :IndentGuidesEnable
- "   endif
- " endfunction
-
-  "todo設定
-  NeoBundleLazy "sjl/gundo.vim", {
-        \ "autoload": {
-        \   "commands": ['GundoToggle'],
-        \}}
-  nnoremap <Leader>g :GundoToggle<CR>
-
-  NeoBundleLazy "thinca/vim-quickrun", {
-        \ "autoload": {
-        \   "mappings": [['nxo', '<Plug>(quickrun)']]
-        \ }}
-  nmap <Leader>r <Plug>(quickrun)
-  let s:hooks = neobundle#get_hooks("vim-quickrun")
-  function! s:hooks.on_source(bundle)
-    let g:quickrun_config = {
-          \ "*": {"runner": "vimproc"},
-          \ }
-  endfunction
-  "Python補完
-  NeoBundle "davidhalter/jedi-vim"
-  let s:hooks = neobundle#get_hooks("jedi-vim")
-  function! s:hooks.on_source(bundle)
-    " jediにvimの設定を任せると'completeopt+=preview'するので
-    " 自動設定機能をOFFにし手動で設定を行う
-    let g:jedi#auto_vim_configuration = 0
-    " 補完の最初の項目が選択された状態だと使いにくいためオフにする
-    let g:jedi#popup_select_first = 0
-    " quickrunと被るため大文字に変更
-    let g:jedi#rename_command = '<Leader>R'
-    " gundoと被るため大文字に変更 (2013-06-24 10:00 追記）
-    let g:jedi#goto_command = '<Leader>G'
-  endfunction
-
-  "前回のセッション回復
-  NeoBundle 'xolox/vim-session', {
-        \ 'depends' : 'xolox/vim-misc',
-        \ }
-  if isdirectory($MY_VIMRUNTIME . '/bundle/vim-session')
-    " 現在のディレクトリ直下の .vimsessions/ を取得 
-    " let s:local_session_directory = xolox#misc#path#merge(getcwd(), '.vimsessions')
-    let s:local_session_directory = getcwd() .'/'. '.vimsessions'
-    
-    " 存在すれば
-    if isdirectory(s:local_session_directory)
-      " session保存ディレクトリをそのディレクトリの設定
-      let g:session_directory = s:local_session_directory
-      " vimを辞める時に自動保存
-      let g:session_autosave = 'yes'
-      " 引数なしでvimを起動した時にsession保存ディレクトリのdefault.vimを開く
-      let g:session_autoload = 'yes'
-      " 1分間に1回自動保存
-      let g:session_autosave_periodic = 1
-    else
-      let g:session_autosave = 'no'
-      let g:session_autoload = 'no'
-    endif
-    unlet s:local_session_directory
-  endif
-
-  NeoBundle 'kana/vim-tabpagecd'
-
-  NeoBundle 'tpope/vim-rails', { 'autoload' : {
-        \ 'filetypes' : ['haml', 'ruby', 'eruby'] }}
-
-  NeoBundleLazy 'alpaca-tc/vim-endwise.git', {
-        \ 'autoload' : {
-        \   'insert' : 1,
-        \ }}
-
-
-  " NeoBundleLazy 'edsono/vim-matchit', { 'autoload' : {
-  "       \ 'filetypes': 'ruby',
-  "       \ 'mappings' : ['nx', '%'] }}
-
-  NeoBundleLazy 'basyura/unite-rails', {
-        \ 'depends' : 'Shougo/unite.vim',
-        \ 'autoload' : {
-        \   'unite_sources' : [
-        \     'rails/bundle', 'rails/bundled_gem', 'rails/config',
-        \     'rails/controller', 'rails/db', 'rails/destroy', 'rails/features',
-        \     'rails/gem', 'rails/gemfile', 'rails/generate', 'rails/git', 'rails/helper',
-        \     'rails/heroku', 'rails/initializer', 'rails/javascript', 'rails/lib', 'rails/log',
-        \     'rails/mailer', 'rails/model', 'rails/rake', 'rails/route', 'rails/schema', 'rails/spec',
-        \     'rails/stylesheet', 'rails/view'
-        \   ]
-        \ }}
-
-  NeoBundleLazy 'alpaca-tc/neorspec.vim', {
-        \ 'depends' : ['alpaca-tc/vim-rails', 'tpope/vim-dispatch'],
-        \ 'autoload' : {
-        \   'commands' : ['RSpec', 'RSpecAll', 'RSpecCurrent', 'RSpecNearest', 'RSpecRetry']
-        \ }}
-
-  NeoBundleLazy 'alpaca-tc/alpaca_tags', {
-        \ 'depends': 'Shougo/vimproc',
-        \ 'autoload' : {
-        \   'commands': ['TagsUpdate', 'TagsSet', 'TagsBundle']
-        \ }}
-
-  NeoBundleLazy 'tsukkee/unite-tag', {
-        \ 'depends' : ['Shougo/unite.vim'],
-        \ 'autoload' : {
-        \   'unite_sources' : ['tag', 'tag/file', 'tag/include']
-        \ }}
-
-
-  NeoBundle 'AndrewRadev/switch.vim'
-
-  function! s:separate_defenition_to_each_filetypes(ft_dictionary) 
-    let result = {}
-
-    for [filetypes, value] in items(a:ft_dictionary)
-      for ft in split(filetypes, ",")
-        if !has_key(result, ft)
-          let result[ft] = []
-        endif
-
-        call extend(result[ft], copy(value))
-      endfor
-    endfor
-
-    return result
-  endfunction
-
-  " ------------------------------------
-  " switch.vim
-  " ------------------------------------
-  nnoremap ! :Switch<CR>
-  let s:switch_definition = {
-        \ '*': [
-        \   ['is', 'are']
-        \ ],
-        \ 'ruby,eruby,haml' : [
-        \   ['if', 'unless'],
-        \   ['while', 'until'],
-        \   ['.blank?', '.present?'],
-        \   ['include', 'extend'],
-        \   ['class', 'module'],
-        \   ['.inject', '.delete_if'],
-        \   ['.map', '.map!'],
-        \   ['attr_accessor', 'attr_reader', 'attr_writer'],
-        \ ],
-        \ 'Gemfile,Berksfile' : [
-        \   ['=', '<', '<=', '>', '>=', '~>'],
-        \ ],
-        \ 'ruby.application_template' : [
-        \   ['yes?', 'no?'],
-        \   ['lib', 'initializer', 'file', 'vendor', 'rakefile'],
-        \   ['controller', 'model', 'view', 'migration', 'scaffold'],
-        \ ],
-        \ 'erb,html,php' : [
-        \   { '<!--\([a-zA-Z0-9 /]\+\)--></\(div\|ul\|li\|a\)>' : '</\2><!--\1-->' },
-        \ ],
-        \ 'rails' : [
-        \   [100, ':continue', ':information'],
-        \   [101, ':switching_protocols'],
-        \   [102, ':processing'],
-        \   [200, ':ok', ':success'],
-        \   [201, ':created'],
-        \   [202, ':accepted'],
-        \   [203, ':non_authoritative_information'],
-        \   [204, ':no_content'],
-        \   [205, ':reset_content'],
-        \   [206, ':partial_content'],
-        \   [207, ':multi_status'],
-        \   [208, ':already_reported'],
-        \   [226, ':im_used'],
-        \   [300, ':multiple_choices'],
-        \   [301, ':moved_permanently'],
-        \   [302, ':found'],
-        \   [303, ':see_other'],
-        \   [304, ':not_modified'],
-        \   [305, ':use_proxy'],
-        \   [306, ':reserved'],
-        \   [307, ':temporary_redirect'],
-        \   [308, ':permanent_redirect'],
-        \   [400, ':bad_request'],
-        \   [401, ':unauthorized'],
-        \   [402, ':payment_required'],
-        \   [403, ':forbidden'],
-        \   [404, ':not_found'],
-        \   [405, ':method_not_allowed'],
-        \   [406, ':not_acceptable'],
-        \   [407, ':proxy_authentication_required'],
-        \   [408, ':request_timeout'],
-        \   [409, ':conflict'],
-        \   [410, ':gone'],
-        \   [411, ':length_required'],
-        \   [412, ':precondition_failed'],
-        \   [413, ':request_entity_too_large'],
-        \   [414, ':request_uri_too_long'],
-        \   [415, ':unsupported_media_type'],
-        \   [416, ':requested_range_not_satisfiable'],
-        \   [417, ':expectation_failed'],
-        \   [422, ':unprocessable_entity'],
-        \   [423, ':precondition_required'],
-        \   [424, ':too_many_requests'],
-        \   [426, ':request_header_fields_too_large'],
-        \   [500, ':internal_server_error'],
-        \   [501, ':not_implemented'],
-        \   [502, ':bad_gateway'],
-        \   [503, ':service_unavailable'],
-        \   [504, ':gateway_timeout'],
-        \   [505, ':http_version_not_supported'],
-        \   [506, ':variant_also_negotiates'],
-        \   [507, ':insufficient_storage'],
-        \   [508, ':loop_detected'],
-        \   [510, ':not_extended'],
-        \   [511, ':network_authentication_required'],
-        \ ],
-        \ 'rspec': [
-        \   ['describe', 'context', 'specific', 'example'],
-        \   ['before', 'after'],
-        \   ['be_true', 'be_false'],
-        \   ['get', 'post', 'put', 'delete'],
-        \   ['==', 'eql', 'equal'],
-        \   { '\.should_not': '\.should' },
-        \   ['\.to_not', '\.to'],
-        \   { '\([^. ]\+\)\.should\(_not\|\)': 'expect(\1)\.to\2' },
-        \   { 'expect(\([^. ]\+\))\.to\(_not\|\)': '\1.should\2' },
-        \ ],
-        \ 'markdown' : [
-        \   ['[ ]', '[x]']
-        \ ]
-        \ }
-
-  let s:switch_definition = s:separate_defenition_to_each_filetypes(s:switch_definition)
-  function! s:define_switch_mappings()
-    if exists('b:switch_custom_definitions')
-      unlet b:switch_custom_definitions
-    endif
-
-    let dictionary = []
-    for filetype in split(&ft, '\.')
-      if has_key(s:switch_definition, filetype)
-        let dictionary = extend(dictionary, s:switch_definition[filetype])
-      endif
-    endfor
-
-    if exists('b:rails_root')
-      let dictionary = extend(dictionary, s:switch_definition['rails'])
-    endif
-
-    if has_key(s:switch_definition, '*')
-      let dictionary = extend(dictionary, s:switch_definition['*'])
-    endif
-
-    if !empty('dictionary')
-      "call alpaca#let_b:('switch_custom_definitions', dictionary)
-    endif
-  endfunction
-
-  augroup SwitchSetting
-    autocmd!
-    autocmd Filetype * if !empty(split(&ft, '\.')) | call <SID>define_switch_mappings() | endif
-  augroup END
-
-  "grepのヘルパー
-  NeoBundle 'fuenor/qfixgrep'
-
-  "デフォルトで使用する外部grep
-  set grepprg=grep
-
-  "grepに含めたくない拡張子
-  let MyGrep_ExcludeReg = '[~#]$\|\.dll$\|\.exe$\|\.lnk$\|\.o$\|\.obj$\|\.pdf$\|\.xls$'
-
-  "大文字、小文字を気にせずに検索する。
-  let g:MyGrepDefault_Ignorecase = 1
-
-  
-  NeoBundle "ujihisa/vimshell-ssh"
-
-  "git log確認
-  NeoBundle 'cohama/agit.vim'
-
-  "git commit関連
-  NeoBundle 'tpope/vim-fugitive'
-
-  " tagsからアウトライン表示
-  NeoBundle 'majutsushi/tagbar'
-
-  "haskell
-  NeoBundle 'itchyny/vim-haskell-sort-import'
-  "便利なghcmodなるコマンドをvimから便利に使うためのプラグイン
-  NeoBundle 'eagletmt/ghcmod-vim'
-  "補完用
-  NeoBundle 'eagletmt/neco-ghc'
-  "インデントを賢くしてくれる
-  NeoBundle 'kana/vim-filetype-haskell'
-  autocmd FileType haskell setlocal omnifunc=necoghc#omnifunc
-  "importを半自動で書いてくれる
-  NeoBundle 'dan-t/vim-hsimport'
-  autocmd FileType haskell nmap <silent> <F1> :silent update <bar> HsimportModule<CR>
-  autocmd FileType haskell nmap <silent> <F2> :silent update <bar> HsimportSymbol<CR>
-  "リファクタ
-  NeoBundle 'glittershark/vim-hare'
-  "シンタクスチェック
-  NeoBundle "osyo-manga/shabadou.vim"
-  NeoBundle "osyo-manga/vim-watchdogs"
-  "supercollider用
-  NeoBundle 'sbl/scvim'
-  "ウィンドウリサイズ
-  NeoBundle 'simeji/winresizer'
-
-  let g:tagbar_type_haskell = {
-    \ 'ctagsbin'  : 'hasktags',
-    \ 'ctagsargs' : '-x -c -o-',
-    \ 'kinds'     : [
-        \  'm:modules:0:1',
-        \  'd:data: 0:1',
-        \  'd_gadt: data gadt:0:1',
-        \  't:type names:0:1',
-        \  'nt:new types:0:1',
-        \  'c:classes:0:1',
-        \  'cons:constructors:1:1',
-        \  'c_gadt:constructor gadt:1:1',
-        \  'c_a:constructor accessors:1:1',
-        \  'ft:function types:1:1',
-        \  'fi:function implementations:0:1',
-        \  'o:others:0:1'
-    \ ],
-    \ 'sro'        : '.',
-    \ 'kind2scope' : {
-        \ 'm' : 'module',
-        \ 'c' : 'class',
-        \ 'd' : 'data',
-        \ 't' : 'type'
-    \ },
-    \ 'scope2kind' : {
-        \ 'module' : 'm',
-        \ 'class'  : 'c',
-        \ 'data'   : 'd',
-        \ 'type'   : 't'
-    \ }
-\ }
-
-
-  "カラースキーマ定義
-  " solarized カラースキーム
-  NeoBundle 'altercation/vim-colors-solarized'
-  " mustang カラースキーム
-  NeoBundle 'croaker/mustang-vim'
-  " wombat カラースキーム
-  NeoBundle 'jeffreyiacono/vim-colors-wombat'
-  " jellybeans カラースキーム
-  NeoBundle 'nanotech/jellybeans.vim'
-  " lucius カラースキーム
-  NeoBundle 'vim-scripts/Lucius'
-  " zenburn カラースキーム
-  NeoBundle 'vim-scripts/Zenburn'
-  " mrkn256 カラースキーム
-  NeoBundle 'mrkn/mrkn256.vim'
-  " railscasts カラースキーム
-  NeoBundle 'jpo/vim-railscasts-theme'
-  " pyte カラースキーム
-  NeoBundle 'therubymug/vim-pyte'
-  " molokai カラースキーム
-  NeoBundle 'tomasr/molokai'
-
-  " カラースキーム一覧表示に Unite.vim を使う
-  NeoBundle 'ujihisa/unite-colorscheme'
-
-  "デフォルトのカラースキーマ
-  set background=dark
-  let g:solarized_contrast="hight"
-  let g:solarized_italic=0
-  let g:solarized_termcolors=256
-  let g:solarized_termtrans=1
-  if isdirectory(s:bundle_root . 'vim-colors-solarized')
-    colorscheme solarized
-  endif
-
-
-  cal neobundle#end()
-  "NeoBundleここまで
-  " (ry
-
-  " インストールされていないプラグインのチェックおよびダウンロード
-  NeoBundleCheck
+  execute 'set runtimepath^=' . fnamemodify(s:dein_repo_dir, ':p')
 endif
 
-colorscheme solarized
+" 設定開始
+if dein#load_state(s:dein_dir)
+  call dein#begin(s:dein_dir)
 
-" ファイルタイププラグインおよびインデントを有効化
-" これはNeoBundleによる処理が終了したあとに呼ばなければならない
-filetype plugin indent on
-"----------------------------------------
-" 一時設定
-"----------------------------------------
+  " プラグインリストを収めた TOML ファイル
+  let s:toml      = g:rc_dir . '/dein.toml'
+  let s:lazy_toml = g:rc_dir . '/dein_lazy.toml'
+
+  " TOML を読み込み、キャッシュしておく
+  call dein#load_toml(s:toml,      {'lazy': 0})
+  call dein#load_toml(s:lazy_toml, {'lazy': 1})
+
+  " 設定終了
+  call dein#end()
+  call dein#save_state()
+endif
+
+" もし、未インストールものものがあったらインストール
+if dein#check_install()
+  call dein#install()
+endif
+
+
+" 各プラグインの設定
+
+let s:bundle_root = expand('$HOME/.vim/bundle')
+
+"タブで開けるように設定
+if has('clientserver')
+  if isdirectory(s:bundle_root . 'vim-singleton')
+    call singleton#enable()
+  endif
+endif
+
+" セッション復元(vim-session)
+if isdirectory($MY_VIMRUNTIME . '/bundle/vim-session')
+  " 現在のディレクトリ直下の .vimsessions/ を取得 
+  " let s:local_session_directory = xolox#misc#path#merge(getcwd(), '.vimsessions')
+  let s:local_session_directory = getcwd() .'/'. '.vimsessions'
+
+  " 存在すれば
+  if isdirectory(s:local_session_directory)
+    " session保存ディレクトリをそのディレクトリの設定
+    let g:session_directory = s:local_session_directory
+    " vimを辞める時に自動保存
+    let g:session_autosave = 'yes'
+    " 引数なしでvimを起動した時にsession保存ディレクトリのdefault.vimを開く
+    let g:session_autoload = 'yes'
+    " 1分間に1回自動保存
+    let g:session_autosave_periodic = 1
+  else
+    let g:session_autosave = 'no'
+    let g:session_autoload = 'no'
+  endif
+  unlet s:local_session_directory
+endif
+
+
+" 各プラグインのキーマップ
+
+"vimshell
+nmap <Leader>v :sp<cr><c-w><c-w>:VimShell<cr>
+nmap <Leader>V :vs<cr><c-l><c-l>:VimShell<cr>
+
+let g:vimshell_no_default_keymappings = 1
+let g:vimshell_prompt_expr = 'getcwd()." > "'
+let g:vimshell_prompt_pattern = '^\f\+ > '
+autocmd FileType vimshell call s:vimshell_settings()
+function! s:vimshell_settings()
+  " overwrite C-l
+  nmap  <buffer> <CR> <Plug>(vimshell_enter)
+  nmap <buffer> q <Plug>(vimshell_hide)
+  nmap <buffer> Q <Plug>(vimshell_exit)
+  nmap <buffer> <C-p> <Plug>(vimshell_previous_prompt)
+  nmap <buffer> <C-n> <Plug>(vimshell_next_prompt)
+  nmap <buffer> <C-S-k> <Plug>(vimshell_delete_previous_output)
+  nmap <buffer> <C-k> <C-w>k
+  nmap <buffer> <C-y> <Plug>(vimshell_paste_prompt)
+  nmap <buffer> E <Plug>(vimshell_move_end_argument)
+  nmap <buffer> cc <Plug>(vimshell_change_line)
+  nmap <buffer> dd <Plug>(vimshell_delete_line)
+  nmap <buffer> I <Plug>(vimshell_insert_head)
+  nmap <buffer> A <Plug>(vimshell_append_end)
+  nmap <buffer> i <Plug>(limshell_insert_enter)
+  nmap <buffer> a <Plug>(vimshell_append_enter)
+  nmap <buffer> ^ <Plug>(vimshell_move_head)
+  nmap <buffer> <C-c> <Plug>(vimshell_interrupt) 
+  "nmap <buffer> <C-l> <Plug>(vimshell_clear)
+  nmap  <buffer> <C-z> <Plug>(vimshell_execute_by_background)
+  imap  <buffer> <CR> <Plug>(vimshell_enter)
+  imap <expr> <buffer> <C-l> pumvisible() ? "\<C-n>" : "\<Plug>(vimshell_history_neocomplete)"
+  imap <buffer> <TAB> <Plug>(vimshell_command_complete)
+  imap <buffer> <C-a> <Plug>(vimshell_move_head)
+  imap <buffer> <C-u> <Plug>(vimshell_delete_backward_line)
+  imap <buffer> <C-w> <Plug>(vimshell_delete_backward_word)
+  imap <buffer> <C-t> <Plug>(vimshell_insert_last_word)
+  imap <buffer> <C-x><C-h> <Plug>(vimshell_run_help)
+  imap <buffer> <C-c> <Plug>(vimshell_interrupt)
+  imap <buffer> <C-h> <Plug>(vimshell_delete_backward_char)
+  imap <buffer> <BS> <Plug>(vimshell_delete_backward_char)
+  imap <buffer> <C-k> <Plug>(vimshell_delete_forward_line)
+  imap <buffer> <C-x> <Plug>(vimshell_move_previous_window)
+endfunction
+
+" カラースキーム
+"デフォルトのカラースキーマ
+set background=dark
+let g:solarized_contrast="hight"
+let g:solarized_italic=0
+let g:solarized_termcolors=256
+let g:solarized_termtrans=1
+if isdirectory(s:bundle_root . '/vim-colors-solarized')
+  colorscheme solarized
+endif
+
