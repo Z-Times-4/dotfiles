@@ -732,6 +732,26 @@ function! s:vimshell_settings()
   imap <buffer> <C-x> <Plug>(vimshell_move_previous_window)
 endfunction
 
+nnoremap <Leader>e :VimFilerExplorer  -split -no-quit -auto-cd<CR>
+" ^^ to go up
+nmap <buffer> ^^ <Plug>(vimfiler_switch_to_parent_directory)
+" use R to refresh
+nmap <buffer> R <Plug>(vimfiler_redraw_screen)
+" overwrite C-l
+nmap <buffer> <C-l> <C-w>l
+" close vimfiler automatically when there are only vimfiler open
+let g:vimfiler_as_default_explorer = 1
+let g:vimfiler_enable_auto_cd = 1
+
+autocmd FileType vimfiler nunmap <buffer> <C-l>
+
+" .pycで終わるファイルを不可視パターンに
+" 2013-08-14 追記
+let g:vimfiler_ignore_pattern = "\%(\.pyc$\)"
+
+" vimfiler specific key mappings
+
+
 " カラースキーム
 "デフォルトのカラースキーマ
 set background=dark
