@@ -8,6 +8,9 @@ repo = 'Shougo/vimfiler.vim'
 #on_if = "isdirectory(bufname('%'))"
 
 [[plugins]]
+repo = 'Shougo/vimshell.vim'
+
+[[plugins]]
 repo = 'Shougo/unite.vim'
 depends = 'neomru.vim'
 hook_source = 'source ~/.vim/rc/plugins/unite.rc.vim'
