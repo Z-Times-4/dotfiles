@@ -130,6 +130,9 @@ autocmd FileType text setlocal textwidth=0
 
 autocmd BufRead .vimrc set filetype=vim
 autocmd BufRead .vimrc set syntax=vim
+autocmd BufRead .vim set filetype=vim
+autocmd BufRead .vimrc set syntax=vim
+autocmd BufRead .toml set syntax=toml
 autocmd BufNewFile,BufRead *.hs set filetype=haskell
 autocmd BufNewFile,BufRead *.yml set filetype=yaml
 
@@ -743,7 +746,7 @@ nmap <buffer> <C-l> <C-w>l
 let g:vimfiler_as_default_explorer = 1
 let g:vimfiler_enable_auto_cd = 1
 
-autocmd FileType vimfiler nunmap <buffer> <C-l>
+autocmd FileType vimfiler nmap <buffer> <C-l> <Nop>
 
 " .pycで終わるファイルを不可視パターンに
 " 2013-08-14 追記

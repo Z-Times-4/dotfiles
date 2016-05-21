@@ -214,3 +214,5 @@ export GREP_OPTIONS='--binary-files=without-match'
 
 ##alias設定
 alias ctags='/usr/local/Cellar/ctags/5.8_1/bin/ctags'
+
+[ -s "/Users/z_times_4/.dnx/dnvm/dnvm.sh" ] && . "/Users/z_times_4/.dnx/dnvm/dnvm.sh" # Load dnvm
