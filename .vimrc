@@ -280,6 +280,18 @@ if has('win32') || has('win64')
   endfunction
 endif
 
+" シンボリックリンクのファイル元を開く
+command! FollowSymlink call s:SwitchToActualFile()
+function! s:SwitchToActualFile()
+  let l:fname = resolve(expand('%:p'))
+  let l:pos = getpos('.')
+  let l:bufname = bufname('%')
+  enew
+  exec 'bw '. l:bufname
+  exec "e" . fname
+  call setpos('.', pos)
+endfunction
+
 " 現バッファの差分表示(変更箇所の表示)
 command! DiffOrig vert new | set bt=nofile | r # | 0d_ | diffthis | wincmd p | diffthis
 " ファイルまたはバッファ番号を指定して差分表示。#なら裏バッファと比較
