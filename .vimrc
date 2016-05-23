@@ -670,11 +670,9 @@ endif
 
 " 各プラグインの設定 {{{
 
-let s:bundle_root = expand('$HOME/.vim/bundle')
-
 "タブで開けるように設定
 if has('clientserver')
-  if isdirectory(s:bundle_root . 'vim-singleton')
+  if !(dein#tap('vim-singleton'))
     call singleton#enable()
   endif
 endif
@@ -752,7 +750,7 @@ let g:solarized_contrast="hight"
 let g:solarized_italic=0
 let g:solarized_termcolors=256
 let g:solarized_termtrans=1
-if isdirectory(s:bundle_root . '/vim-colors-solarized')
+if dein#tap('/vim-colors-solarized')
   colorscheme solarized
 endif
 
