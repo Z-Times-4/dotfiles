@@ -49,34 +49,52 @@ repo = 'thinca/vim-singleton'
 [[plugins]]
 repo = 'Shougo/vimproc.vim'
 hook_post_update = '''
-  if dein# util# _is_windows()
+  if dein#util#_is_windows()
     let cmd = 'tools\\update-dll-mingw'
-  elseif dein# util# _is_cygwin()
+  elseif dein#util#_is_cygwin()
     let cmd = 'make -f make_cygwin.mak'
   elseif executable('gmake')
     let cmd = 'gmake'
   else
     let cmd = 'make'
   endif
-  let g:dein# plugin.build = cmd
+  let g:dein#plugin.build = cmd
 '''
 
 [[plugins]]
 repo = "Shougo/neossh.vim"
 
-# テキスト編集
+# 括られてるtextを編集
 [[plugins]]
 repo = 'tpope/vim-surround'
+
+#テキスト整形Align…の新しいやつ
 [[plugins]]
-repo = 'vim-scripts/Align'
-[[plugins]]
-repo = 'vim-scripts/YankRing.vim'
+repo = 'junegunn/vim-easy-align'
 
 
 # セッション復元
 [[plugins]]
 repo = "xolox/vim-session"
 depends = ['xolox/vim-misc']
+hook_add = '''
+let s:local_session_directory = getcwd() .'/'. '.vimsessions'
+  " 存在すれば
+if isdirectory(s:local_session_directory)
+  " session保存ディレクトリをそのディレクトリの設定
+  let g:session_directory = s:local_session_directory
+  " vimを辞める時に自動保存
+  let g:session_autosave = 'yes'
+  " 引数なしでvimを起動した時にsession保存ディレクトリのdefault.vimを開く
+  let g:session_autoload = 'yes'
+  " 1分間に1回自動保存
+  let g:session_autosave_periodic = 1
+else
+  let g:session_autosave = 'no'
+  let g:session_autoload = 'no'
+endif
+'''
+
 [[plugins]]
 repo = "xolox/vim-misc"
 
@@ -107,6 +125,11 @@ repo = 'majutsushi/tagbar'
 # windowリサイズ
 [[plugins]]
 repo = 'simeji/winresizer'
+
+# neosnippetと連携
+[[plugins]]
+repo = 'Shougo/neosnippet-snippets'
+
 
 # カラースキーマ定義{{{
 # solarized カラースキーム
