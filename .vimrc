@@ -646,11 +646,12 @@ endif
 
 " 設定開始
 if dein#load_state(s:dein_dir)
-  call dein#begin(s:dein_dir)
 
   " プラグインリストを収めた TOML ファイル
   let s:toml      = g:rc_dir . '/dein.toml'
   let s:lazy_toml = g:rc_dir . '/dein_lazy.toml'
+
+  call dein#begin(s:dein_dir, [$MYVIMRC, s:toml, s:lazy_toml])
 
   " TOML を読み込み、キャッシュしておく
   call dein#load_toml(s:toml,      {'lazy': 0})
