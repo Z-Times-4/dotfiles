@@ -41,7 +41,6 @@ endif
 let g:rc_dir=$MY_VIMRUNTIME . '/rc'
 
 
-"au BufEnter * execute 'lcd ' fnameescape(expand('%:p:h'))
 
 
 if has('gui_macvim')
@@ -140,8 +139,6 @@ autocmd BufNewFile,BufRead *.yml set filetype=yaml
 if has('mouse')
   set mouse=a
 endif
-" pluginを使用可能にする
-filetype plugin indent on
 
 if !has('gui_running')
   set notimeout
@@ -625,6 +622,10 @@ endif
 
 "ファイル読み込み時にタブのディレクトリを移動
 au BufEnter * execute ":lcd " . substitute((isdirectory(expand("%:p:h")) ? expand("%:p:h") : "")," ","\\\\ ","g")
+au BufEnter * execute 'lcd ' fnameescape(expand('%:p:h'))
+
+"バッファ読み込み時にシンボリックリンクなら元ファイルのパスを設定
+au BufEnter * execute findfile(expand('%')) != "" && resolve(expand('%:p')) != getcwd().'/'.expand('%') ? ":FollowSymlink"  : ""
 "----------------------------------------
 " 各種プラグイン設定
 "----------------------------------------
@@ -734,7 +735,7 @@ nmap <buffer> <C-l> <C-w>l
 let g:vimfiler_as_default_explorer = 1
 let g:vimfiler_enable_auto_cd = 1
 
-autocmd FileType vimfiler nmap <buffer> <C-l> <Nop>
+autocmd FileType vimfiler nmap <buffer> <C-l> <C-w>l
 
 " .pycで終わるファイルを不可視パターンに
 " 2013-08-14 追記
@@ -755,3 +756,7 @@ if dein#tap('/vim-colors-solarized')
 endif
 
 "}}}
+"
+"
+" pluginを使用可能にする
+filetype plugin indent on
