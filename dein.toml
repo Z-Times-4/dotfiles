@@ -79,7 +79,7 @@ repo = "xolox/vim-session"
 depends = ['xolox/vim-misc']
 hook_add = '''
 let s:local_session_directory = getcwd() .'/'. '.vimsessions'
-  " 存在すれば
+"  存在すれば
 if isdirectory(s:local_session_directory)
   " session保存ディレクトリをそのディレクトリの設定
   let g:session_directory = s:local_session_directory
@@ -119,8 +119,8 @@ repo = 'cohama/agit.vim'
 repo = 'tpope/vim-fugitive'
 
 # tagsからアウトライン表示
-[[plugins]]
-repo = 'majutsushi/tagbar'
+#[[plugins]]
+#repo = 'majutsushi/tagbar'
 
 # windowリサイズ
 [[plugins]]
@@ -129,6 +129,16 @@ repo = 'simeji/winresizer'
 # neosnippetと連携
 [[plugins]]
 repo = 'Shougo/neosnippet-snippets'
+
+# コンテクストごとにftを自動切り替えする
+[[plugins]]
+repo = "osyo-manga/vim-precious"
+depends = "Shougo/context_filetype.vim" 
+
+# コンテクストごとにftを判別する
+[[plugins]]
+repo = "Shougo/context_filetype.vim"
+
 
 
 # カラースキーマ定義{{{
