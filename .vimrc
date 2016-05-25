@@ -1,4 +1,4 @@
-jk" release autogroup in MyAutoCmd
+" release autogroup in MyAutoCmd
 augroup MyAutoCmd
   autocmd!
 augroup END
@@ -752,12 +752,14 @@ let g:solarized_contrast="hight"
 let g:solarized_italic=0
 let g:solarized_termcolors=256
 let g:solarized_termtrans=1
-if dein#tap('/vim-colors-solarized')
-  colorscheme solarized
-endif
 
+if !dein#check_install(['/vim-colors-solarized'])
+    colorscheme solarized
+  endif
 "}}}
 "
 "
 " pluginを使用可能にする
 filetype plugin indent on
+
+
