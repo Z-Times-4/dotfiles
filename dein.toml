@@ -118,6 +118,10 @@ repo = 'cohama/agit.vim'
 [[plugins]]
 repo = 'tpope/vim-fugitive'
 
+# git rebase -i時のdiff
+[[plugins]]
+repo = 'hotwatermorning/auto-git-diff'
+
 # tagsからアウトライン表示
 #[[plugins]]
 #repo = 'majutsushi/tagbar'
@@ -139,6 +143,36 @@ depends = "Shougo/context_filetype.vim"
 [[plugins]]
 repo = "Shougo/context_filetype.vim"
 
+# タブごとに:cdが機能
+[[plugins]]
+repo = "kana/vim-tabpagecd"
+
+# grepヘルパー
+[[plugins]]
+repo = 'fuenor/qfixgrep'
+hook_add= '''
+"デフォルトで使用する外部grep
+set grepprg=grep
+
+"grepに含めたくない拡張子
+let MyGrep_ExcludeReg = '[~#]$\|\.dll$\|\.exe$\|\.lnk$\|\.o$\|\.obj$\|\.pdf$\|\.xls$'
+
+"大文字、小文字を気にせずに検索する。
+let g:MyGrepDefault_Ignorecase = 1
+'''
+
+# インデント可視化
+[[plugins]]
+repo = 'nathanaelkane/vim-indent-guides'
+hook_add = '''
+let g:indent_guides_enable_on_vim_startup=1
+let g:indent_guides_start_level=2
+let g:indent_guides_auto_colors=0
+autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  ctermbg=235
+autocmd VimEnter,Colorscheme * :hi IndentGuidesEven ctermbg=234
+let g:indent_guides_color_change_percent = 30
+let g:indent_guides_guide_size = 1
+'''
 
 
 # カラースキーマ定義{{{
