@@ -614,7 +614,6 @@ augroup file_loading
   set textwidth=0
   set tw=0
   autocmd FileType text setlocal textwidth=0
-
   autocmd BufRead .vimrc set filetype=vim
   autocmd BufRead .vimrc set syntax=vim
   autocmd BufRead .vim set filetype=vim
@@ -622,6 +621,7 @@ augroup file_loading
   autocmd BufRead .toml set syntax=toml
   autocmd BufNewFile,BufRead *.hs set filetype=haskell
   autocmd BufNewFile,BufRead *.yml set filetype=yaml
+
   "ファイル読み込み時にタブのディレクトリを移動
   au BufEnter * execute ":lcd " . substitute((isdirectory(expand("%:p:h")) ? expand("%:p:h") : "")," ","\\\\ ","g")
   au BufEnter * execute 'lcd ' fnameescape(expand('%:p:h'))
