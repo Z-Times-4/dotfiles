@@ -627,7 +627,8 @@ augroup file_loading
   au BufEnter * execute 'lcd ' fnameescape(expand('%:p:h'))
 
   "バッファ読み込み時にシンボリックリンクなら元ファイルのパスを設定
-  au BufEnter * execute findfile(expand('%')) != "" && resolve(expand('%:p')) != getcwd().'/'.expand('%') ? ":FollowSymlink"  : ""
+  au BufEnter findfile(expand('%')) != "" && resolve(expand('%:p')) != getcwd().'/'.expand('%') 
+        \execute ":FollowSymlink"
 augroup end
 "----------------------------------------
 " 各種プラグイン設定
