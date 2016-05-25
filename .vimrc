@@ -121,20 +121,6 @@ set ambiwidth=double
 set wildmenu
 set wildmode=list:longest,full
 
-"自動改行を無効にする
-autocmd BufRead * set textwidth=0
-set textwidth=0
-set tw=0
-autocmd FileType text setlocal textwidth=0
-
-autocmd BufRead .vimrc set filetype=vim
-autocmd BufRead .vimrc set syntax=vim
-autocmd BufRead .vim set filetype=vim
-autocmd BufRead .vimrc set syntax=vim
-autocmd BufRead .toml set syntax=toml
-autocmd BufNewFile,BufRead *.hs set filetype=haskell
-autocmd BufNewFile,BufRead *.yml set filetype=yaml
-
 " マウスを有効にする
 if has('mouse')
   set mouse=a
@@ -620,12 +606,29 @@ else
   "autochdirが存在しないが、カレントディレクトリを移動したい場合
 endif
 
-"ファイル読み込み時にタブのディレクトリを移動
-au BufEnter * execute ":lcd " . substitute((isdirectory(expand("%:p:h")) ? expand("%:p:h") : "")," ","\\\\ ","g")
-au BufEnter * execute 'lcd ' fnameescape(expand('%:p:h'))
+augroup file_loading
+  autocmd!
 
-"バッファ読み込み時にシンボリックリンクなら元ファイルのパスを設定
-au BufEnter * execute findfile(expand('%')) != "" && resolve(expand('%:p')) != getcwd().'/'.expand('%') ? ":FollowSymlink"  : ""
+  "自動改行を無効にする
+  autocmd BufRead * set textwidth=0
+  set textwidth=0
+  set tw=0
+  autocmd FileType text setlocal textwidth=0
+
+  autocmd BufRead .vimrc set filetype=vim
+  autocmd BufRead .vimrc set syntax=vim
+  autocmd BufRead .vim set filetype=vim
+  autocmd BufRead .vimrc set syntax=vim
+  autocmd BufRead .toml set syntax=toml
+  autocmd BufNewFile,BufRead *.hs set filetype=haskell
+  autocmd BufNewFile,BufRead *.yml set filetype=yaml
+  "ファイル読み込み時にタブのディレクトリを移動
+  au BufEnter * execute ":lcd " . substitute((isdirectory(expand("%:p:h")) ? expand("%:p:h") : "")," ","\\\\ ","g")
+  au BufEnter * execute 'lcd ' fnameescape(expand('%:p:h'))
+
+  "バッファ読み込み時にシンボリックリンクなら元ファイルのパスを設定
+  au BufEnter * execute findfile(expand('%')) != "" && resolve(expand('%:p')) != getcwd().'/'.expand('%') ? ":FollowSymlink"  : ""
+augroup end
 "----------------------------------------
 " 各種プラグイン設定
 "----------------------------------------
@@ -681,6 +684,11 @@ endif
 
 " 各プラグインのキーマップ
 
+augroup plugin_load
+  autocmd!
+  autocmd FileType vimshell call s:vimshell_settings()
+  autocmd FileType vimfiler nmap <buffer> <C-l> <C-w>l
+augroup end
 "vimshell
 nmap <Leader>v :sp<cr><c-w><c-w>:VimShell<cr>
 nmap <Leader>V :vs<cr><c-l><c-l>:VimShell<cr>
@@ -688,7 +696,6 @@ nmap <Leader>V :vs<cr><c-l><c-l>:VimShell<cr>
 let g:vimshell_no_default_keymappings = 1
 let g:vimshell_prompt_expr = 'getcwd()." > "'
 let g:vimshell_prompt_pattern = '^\f\+ > '
-autocmd FileType vimshell call s:vimshell_settings()
 function! s:vimshell_settings()
   " overwrite C-l
   nmap  <buffer> <CR> <Plug>(vimshell_enter)
@@ -736,7 +743,6 @@ nmap <buffer> <C-l> <C-w>l
 let g:vimfiler_as_default_explorer = 1
 let g:vimfiler_enable_auto_cd = 1
 
-autocmd FileType vimfiler nmap <buffer> <C-l> <C-w>l
 
 " .pycで終わるファイルを不可視パターンに
 " 2013-08-14 追記
