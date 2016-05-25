@@ -753,7 +753,7 @@ let g:solarized_italic=0
 let g:solarized_termcolors=256
 let g:solarized_termtrans=1
 
-if !dein#check_install(['/vim-colors-solarized'])
+if !dein#check_install(['vim-colors-solarized'])
     colorscheme solarized
   endif
 "}}}

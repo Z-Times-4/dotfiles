@@ -5,7 +5,7 @@ repo = 'Shougo/dein.vim'
 repo = 'Shougo/vimfiler.vim'
 # depends = 'Shougo/unite.vim'
 # on_map = [['n', '<Plug>']]
-# on_if = "isdirectory(bufname('%'))"
+# on_if =  'isdirectory(bufname("%"))'
 
 [[plugins]]
 repo = 'Shougo/vimshell.vim'
@@ -62,7 +62,7 @@ hook_post_update = '''
 '''
 
 [[plugins]]
-repo = "Shougo/neossh.vim"
+repo = 'Shougo/neossh.vim'
 
 # 括られてるtextを編集
 [[plugins]]
@@ -75,7 +75,7 @@ repo = 'junegunn/vim-easy-align'
 
 # セッション復元
 [[plugins]]
-repo = "xolox/vim-session"
+repo = 'xolox/vim-session'
 depends = ['xolox/vim-misc']
 hook_add = '''
 let s:local_session_directory = getcwd() .'/'. '.vimsessions'
@@ -96,7 +96,7 @@ endif
 '''
 
 [[plugins]]
-repo = "xolox/vim-misc"
+repo = 'xolox/vim-misc'
 
 # タブ移動
 [[plugins]]
@@ -104,11 +104,11 @@ repo = 'kana/vim-tabpagecd'
 
 # grepヘルパー
 [[plugins]]
-repo = "fuenor/qfixgrep"
+repo = 'fuenor/qfixgrep'
 
 # ssh接続
 [[plugins]]
-repo = "ujihisa/vimshell-ssh"
+repo = 'ujihisa/vimshell-ssh'
 
 # git log確認
 [[plugins]]
@@ -136,16 +136,16 @@ repo = 'Shougo/neosnippet-snippets'
 
 # コンテクストごとにftを自動切り替えする
 [[plugins]]
-repo = "osyo-manga/vim-precious"
-depends = "Shougo/context_filetype.vim" 
+repo = 'osyo-manga/vim-precious'
+depends = 'Shougo/context_filetype.vim' 
 
 # コンテクストごとにftを判別する
 [[plugins]]
-repo = "Shougo/context_filetype.vim"
+repo = 'Shougo/context_filetype.vim'
 
 # タブごとに:cdが機能
 [[plugins]]
-repo = "kana/vim-tabpagecd"
+repo = 'kana/vim-tabpagecd'
 
 # grepヘルパー
 [[plugins]]
