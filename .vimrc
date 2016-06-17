@@ -42,14 +42,9 @@ let g:rc_dir=$MY_VIMRUNTIME . '/rc'
 
 map ¥ <leader>
 
-if has('multi_byte_ime') || has('xim') || has('gui_macvim' || has('gui_running'))
-  " Insert mode: lmap off, IME ON
-  set iminsert=2
-  " Serch mode: lmap off, IME ON
-  set imsearch=2
-  " Normal mode: IME off
-  inoremap <silent> <ESC> <ESC>:set iminsert=0<CR>
-endif
+set iminsert=0
+set iminsert=0
+inoremap <silent> <ESC> <ESC>:set iminsert=0<CR>
 
 set shiftround          " '<'や'>'でインデントする際に'shiftwidth'の倍数に丸める
 set infercase           " 補完時に大文字小文字を区別しない
