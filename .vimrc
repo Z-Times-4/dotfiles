@@ -619,7 +619,13 @@ augroup file_loading
   au BufEnter * execute 'lcd ' fnameescape(expand('%:p:h'))
 
   "バッファ読み込み時にシンボリックリンクなら元ファイルのパスを設定
-  au BufEnter * if findfile(expand('%')) != "" && resolve(expand('%:p')) != getcwd().'/'.expand('%') | execute ':FollowSymlink' | endif
+  if has("mac")
+    au BufEnter * if findfile(expand('%')) != "" && resolve(expand('%:p')) != getcwd().'/'.expand('%') | execute ':FollowSymlink' | endif
+  elseif has("unix")
+    "findfileで元ファイルが辿られる+expand("%")でもフルパスが出るため場合分け
+    au BufEnter * if resolve(expand('%:p:h')) != getcwd() | execute ':FollowSymlink' | endif
+  endif
+
 augroup end
 
 "----------------------------------------
