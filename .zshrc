@@ -213,7 +213,8 @@ esac
 plugins=(git ruby osx bundler brew rails emoji-clock)
 ZSH_THEME="wedisagree"
 source $ZSH/oh-my-zsh.sh
-export GREP_OPTIONS='--binary-files=without-match'
+GREP_OPTIONS='--binary-files=without-match'
+alias grep="grep $GREP_OPTIONS"
 
 
 ##alias設定
