@@ -69,13 +69,6 @@ set backspace=indent,eol,start
 
 " クリップボードをデフォルトのレジスタとして指定。後にYankRingを使うので
 " 'unnamedplus'が存在しているかどうかで設定を分ける必要がある
-if has('unnamedplus')
-  " set clipboard& clipboard+=unnamedplus " 2013-07-03 14:30 unnamed 追加
-  set clipboard+=unnamedplus,unnamed 
-else
-  " set clipboard& clipboard+=unnamed,autoselect 2013-06-24 10:00 autoselect 削除
-  set clipboard+=unnamed
-endif
 
 
 " ファイルの上書きの前にバックアップを作る/作らない
@@ -93,9 +86,13 @@ endif
 set noswapfile
 " viminfoを作成しない
 
-
+set clipboard=
 " クリップボードを共有
-set clipboard+=unnamed
+if has('unnamedplus')
+  set clipboard+=unnamedplus,unnamed 
+else
+  set clipboard+=unnamed
+endif
 " 8進数を無効にする。<C-a>,<C-x>に影響する
 set nrformats-=octal
 " キーコードやマッピングされたキー列が完了するのを待つ時間(ミリ秒)
