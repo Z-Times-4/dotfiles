@@ -40,12 +40,7 @@ endif
 
 let g:rc_dir=$MY_VIMRUNTIME . '/rc'
 
-
-
-
-if has('gui_macvim')
-  map ¥ <leader>
-endif
+map ¥ <leader>
 
 if has('multi_byte_ime') || has('xim') || has('gui_macvim' || has('gui_running'))
   " Insert mode: lmap off, IME ON
@@ -760,8 +755,9 @@ let g:solarized_italic=0
 let g:solarized_termcolors=256
 let g:solarized_termtrans=1
 
-if !dein#check_install(['vim-colors-solarized'])
+if dein#tap('vim-colors-solarized')
     colorscheme solarized
+    set t_Co=256
   endif
 "}}}
 "
