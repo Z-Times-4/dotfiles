@@ -201,6 +201,10 @@ case "$(uname)" in
           alias vi=vim
       fi
       ;;
+    Linux) # Linuxならば
+      export ZSH=~/.oh-my-zsh
+      export PATH="$HOME/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+      ;;
 
     *) ;; # OSがMac以外ならば何もしない
 esac
