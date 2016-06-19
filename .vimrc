@@ -3,7 +3,6 @@ augroup MyAutoCmd
   autocmd!
 augroup END
 
-
 set fileencodings=utf-8,iso-2022-jp,cp932,sjis,euc-jp
 set encoding=utf-8
 set nocompatible
@@ -251,16 +250,38 @@ if has('win32') || has('win64')
 endif
 
 " シンボリックリンクのファイル元を開く
-command! FollowSymlink call s:SwitchToActualFile()
+command! FollowSymlink if has("win32") || has("win64") | call s:SwitchToActualFileForWindows() |else| call s:SwitchToActualFile() | endif
 function! s:SwitchToActualFile()
   let l:fname = resolve(expand('%:p'))
   let l:pos = getpos('.')
   let l:bufname = bufname('%')
   enew
   exec 'bw '. l:bufname
-  exec "e" . fname
+  exec "e " . fname
   call setpos('.', pos)
 endfunction
+
+function! s:SwitchToActualFileForWindows()
+  let l:pos = getpos('.')
+  let l:bufname = bufname('%')
+  let l:fname= s:GetSymlinkPath()
+  enew
+  exec 'bw '. l:bufname
+  exec "e " . l:fname
+  let l:path = expand(fnamemodify(l:fname, "p:h")) 
+  cd  %:h
+  call setpos('.', pos)
+endfunction
+
+function! s:GetSymlinkPath()
+  let s:bufname = expand('%')
+  let s:fnamebase = system("dir | grep " . s:bufname  . "| grep -o \\\[.*\\\]")
+  let s:parse_first = stridx(s:fnamebase, "[") +1
+  let s:parse_last = strridx(s:fnamebase, "]") -1
+  let s:fname = s:fnamebase[s:parse_first:s:parse_last]
+  return s:fname
+endfunction
+
 
 " 現バッファの差分表示(変更箇所の表示)
 command! DiffOrig vert new | set bt=nofile | r # | 0d_ | diffthis | wincmd p | diffthis
@@ -601,13 +622,15 @@ augroup file_loading
   set textwidth=0
   set tw=0
   autocmd FileType text setlocal textwidth=0
-  autocmd BufRead .vimrc set filetype=vim
-  autocmd BufRead .vimrc set syntax=vim
-  autocmd BufRead .vim set filetype=vim
-  autocmd BufRead .vimrc set syntax=vim
-  autocmd BufRead .toml set syntax=toml
-  autocmd BufNewFile,BufRead *.hs set filetype=haskell
-  autocmd BufNewFile,BufRead *.yml set filetype=yaml
+
+  "filetype設定
+autocmd BufNewFile,BufRead,BufEnter,VimEnter  .vimrc set filetype=vim
+autocmd BufNewFile,BufRead,BufEnter,VimEnter .vimrc set syntax=vim
+  autocmd BufNewFile,BufRead,BufEnter *.vim set filetype=vim
+  autocmd BufNewFile,BufRead,BufEnter *.vim set syntax=vim
+  autocmd BufNewFile,BufRead,BufEnter .toml set syntax=toml
+  autocmd BufNewFile,BufRead,BufEnter *.hs set filetype=haskell
+  autocmd BufNewFile,BufRead,BufEnter *.yml set filetype=yaml
 
   "ファイル読み込み時にタブのディレクトリを移動
   au BufEnter * execute ":lcd " . substitute((isdirectory(expand("%:p:h")) ? expand("%:p:h") : "")," ","\\\\ ","g")
@@ -619,6 +642,10 @@ augroup file_loading
   elseif has("unix")
     "findfileで元ファイルが辿られる+expand("%")でもフルパスが出るため場合分け
     au BufEnter * if resolve(expand('%:p:h')) != getcwd() | execute ':FollowSymlink' | endif
+  elseif has("win32") || has("win64")
+    "windowsは更にややこしいので場合分け(FollowSymlinkコマンドで分岐している)
+    " バッファでなくsymlinkがディレクトリに含まれている
+    au BufEnter * if findfile(expand('%')) != "" && stridx(s:GetSymlinkPath(), expand("%")) != -1 | execute ":FollowSymlink" | endif
   endif
 
 augroup end
@@ -632,6 +659,10 @@ augroup end
 let s:dein_dir = $MY_VIMRUNTIME . '/bundle'
 " dein.vim 本体
 let s:dein_repo_dir = s:dein_dir . '/repos/github.com/Shougo/dein.vim'
+"タイムアウト値
+let g:dein#install_process_timeout=3600
+"同時ダウンロードプロセス
+let g:dein#install_max_processes=4
 
 " dein.vim がなければ github から落としてくる
 if &runtimepath !~# '/dein.vim'
