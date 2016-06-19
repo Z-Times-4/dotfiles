@@ -43,7 +43,7 @@ let g:rc_dir=$MY_VIMRUNTIME . '/rc'
 map ¥ <leader>
 
 set iminsert=0
-set iminsert=0
+set imsearch=0
 inoremap <silent> <ESC> <ESC>:set iminsert=0<CR>
 
 set shiftround          " '<'や'>'でインデントする際に'shiftwidth'の倍数に丸める
