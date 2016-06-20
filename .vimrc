@@ -659,6 +659,10 @@ augroup end
 let s:dein_dir = $MY_VIMRUNTIME . '/bundle'
 " dein.vim 本体
 let s:dein_repo_dir = s:dein_dir . '/repos/github.com/Shougo/dein.vim'
+"タイムアウト値
+let g:dein#install_process_timeout=3600
+"同時ダウンロードプロセス
+let g:dein#install_max_processes=4
 
 " dein.vim がなければ github から落としてくる
 if &runtimepath !~# '/dein.vim'
