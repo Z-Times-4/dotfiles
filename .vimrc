@@ -624,8 +624,8 @@ augroup file_loading
   autocmd FileType text setlocal textwidth=0
 
   "filetype設定
-autocmd BufNewFile,BufRead,BufEnter,VimEnter  .vimrc set filetype=vim
-autocmd BufNewFile,BufRead,BufEnter,VimEnter .vimrc set syntax=vim
+  autocmd BufNew,BufNewFile,BufRead,BufEnter,VimEnter .vimrc set filetype=vim
+  autocmd BufNew,BufNewFile,BufRead,BufEnter,VimEnter .vimrc set syntax=vim
   autocmd BufNewFile,BufRead,BufEnter *.vim set filetype=vim
   autocmd BufNewFile,BufRead,BufEnter *.vim set syntax=vim
   autocmd BufNewFile,BufRead,BufEnter .toml set syntax=toml
