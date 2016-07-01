@@ -129,6 +129,9 @@ repo = 'hotwatermorning/auto-git-diff'
 # windowリサイズ
 [[plugins]]
 repo = 'simeji/winresizer'
+hook_add = """
+let g:winresizer_start_key='<C-S-E>'
+"""
 
 # neosnippetと連携
 [[plugins]]
