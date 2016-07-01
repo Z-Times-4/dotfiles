@@ -46,7 +46,10 @@ hook_add =
 '''
   nmap <silent> <Leader>r <Plug>(quickrun)
   let g:quickrun_config = {
-    \ "*": {"runner": "vimproc"},
+\   "_" : {
+\       "runner" : "vimproc",
+\       "runner/vimproc/updatetime" : 10,
+\       },
     \ }
 '''
 
@@ -67,6 +70,11 @@ hook_add = '''
 [[plugins]]
 repo = 'cespare/vim-toml'
 on_ft = 'toml'
+
+# go{{{
+repo = 'fatih/vim-go'
+on_ft = 'go'
+# }}}
 
 # haskell{{{
 # 便利なghcmodなるコマンドをvimから便利に使うためのプラグイン
