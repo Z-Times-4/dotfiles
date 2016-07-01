@@ -42,7 +42,7 @@ let g:rc_dir=$MY_VIMRUNTIME . '/rc'
 map ¥ <leader>
 
 set iminsert=0
-set iminsert=0
+set imsearch=0
 inoremap <silent> <ESC> <ESC>:set iminsert=0<CR>
 
 set shiftround          " '<'や'>'でインデントする際に'shiftwidth'の倍数に丸める
@@ -624,8 +624,8 @@ augroup file_loading
   autocmd FileType text setlocal textwidth=0
 
   "filetype設定
-autocmd BufNewFile,BufRead,BufEnter,VimEnter  .vimrc set filetype=vim
-autocmd BufNewFile,BufRead,BufEnter,VimEnter .vimrc set syntax=vim
+  autocmd BufNew,BufNewFile,BufRead,BufEnter,VimEnter .vimrc set filetype=vim
+  autocmd BufNew,BufNewFile,BufRead,BufEnter,VimEnter .vimrc set syntax=vim
   autocmd BufNewFile,BufRead,BufEnter *.vim set filetype=vim
   autocmd BufNewFile,BufRead,BufEnter *.vim set syntax=vim
   autocmd BufNewFile,BufRead,BufEnter .toml set syntax=toml
@@ -662,7 +662,7 @@ let s:dein_repo_dir = s:dein_dir . '/repos/github.com/Shougo/dein.vim'
 "タイムアウト値
 let g:dein#install_process_timeout=3600
 "同時ダウンロードプロセス
-let g:dein#install_max_processes=4
+let g:dein#install_max_processes=1
 
 " dein.vim がなければ github から落としてくる
 if &runtimepath !~# '/dein.vim'
