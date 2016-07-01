@@ -5,7 +5,7 @@ export LANG=ja_JP.UTF-8
 bindkey -v
 
 # PROMPT {{{
-PROMPT="$ "
+PROMPT="%~:%c %n$ "
 PROMPT2="> "
 SPROMPT="%r is correct? [n,y,a,e]: "
 RPROMPT='[`rprompt-git-current-branch`%F{cyan}%~%f]'
@@ -182,20 +182,22 @@ alias lv="$PAGER"
 fi
 # }}}
 
+## go関連
+
+export GOPATH=$HOME/go
+export PATH=$PATH:$GOPATH/bin
+eval "$(direnv hook zsh)"
 
 
 ## デフォルトエディタ設定
-EDITOR=vim
-export PATH=$HOME/.nodebrew/current/bin:$PATH
-
-
-
+EDITOR=/Applications/MacVim.app/Contents/MacOS/Vim
 
 case "$(uname)" in
 
     Darwin) # OSがMacならば
       export ZSH=/Users/z_times_4/.oh-my-zsh
       export PATH="/Users/z_times_4/.local/bin:/Users/z_times_4/.nodebrew/current/bin:/Users/z_times_4/.nodebrew/current/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin/opt/homebrew-cask/Caskroom:$PATH"
+      export PATH=$HOME/.nodebrew/current/bin:$PATH
       if [[ -d /Applications/MacVim.app ]]; then # MacVimが存在するならば
         alias vim=/Applications/MacVim.app/Contents/MacOS/Vim
           alias vi=vim
@@ -203,7 +205,7 @@ case "$(uname)" in
       ;;
     Linux) # Linuxならば
       export ZSH=~/.oh-my-zsh
-      export PATH="$HOME/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+      export PATH=$HOME/local/bin:$HOME/.local/bin:/usr/bin:/bin:/usr/sbin:/sbin:$PATH
       ;;
 
     *) ;; # OSがMac以外ならば何もしない
@@ -221,3 +223,4 @@ alias grep="grep $GREP_OPTIONS"
 alias ctags='/usr/local/Cellar/ctags/5.8_1/bin/ctags'
 
 [ -s "/Users/z_times_4/.dnx/dnvm/dnvm.sh" ] && . "/Users/z_times_4/.dnx/dnvm/dnvm.sh" # Load dnvm
+xkbcomp -I$HOME/.xkb ~/.xkb/keymap/mykbd $DISPLAY 2> /dev/null
