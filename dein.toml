@@ -17,9 +17,8 @@ let g:vimfiler_as_default_explorer = 1
 let g:vimfiler_enable_auto_cd = 1
 
 
-" .pycで終わるファイルを不可視パターンに
-" 2013-08-14 追記
-let g:vimfiler_ignore_pattern = "\%(\.pyc$\)"
+" d不可視パターン
+let g:vimfiler_ignore_pattern = '\(^\.\|\~$\|\.git$\|\.hi$\|\.pyc$\|\.[oad]$\)'
 """
 # depends = 'Shougo/unite.vim'
 # on_map = [['n', '<Plug>']]
