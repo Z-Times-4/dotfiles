@@ -709,81 +709,11 @@ endif
 
 " 各プラグインのキーマップ
 
-augroup plugin_load
-  autocmd!
-  autocmd FileType vimshell call s:vimshell_settings()
-  autocmd FileType vimfiler nmap <buffer> <C-l> <C-w>l
-augroup end
-"vimshell
-nmap <Leader>v :sp<cr><c-w><c-w>:VimShell<cr>
-nmap <Leader>V :vs<cr><c-l><c-l>:VimShell<cr>
-
-let g:vimshell_no_default_keymappings = 1
-let g:vimshell_prompt_expr = 'getcwd()." > "'
-let g:vimshell_prompt_pattern = '^\f\+ > '
-function! s:vimshell_settings()
-  " overwrite C-l
-  nmap  <buffer> <CR> <Plug>(vimshell_enter)
-  nmap <buffer> q <Plug>(vimshell_hide)
-  nmap <buffer> Q <Plug>(vimshell_exit)
-  nmap <buffer> <C-p> <Plug>(vimshell_previous_prompt)
-  nmap <buffer> <C-n> <Plug>(vimshell_next_prompt)
-  nmap <buffer> <C-S-k> <Plug>(vimshell_delete_previous_output)
-  nmap <buffer> <C-k> <C-w>k
-  nmap <buffer> <C-y> <Plug>(vimshell_paste_prompt)
-  nmap <buffer> E <Plug>(vimshell_move_end_argument)
-  nmap <buffer> cc <Plug>(vimshell_change_line)
-  nmap <buffer> dd <Plug>(vimshell_delete_line)
-  nmap <buffer> I <Plug>(vimshell_insert_head)
-  nmap <buffer> A <Plug>(vimshell_append_end)
-  nmap <buffer> i <Plug>(limshell_insert_enter)
-  nmap <buffer> a <Plug>(vimshell_append_enter)
-  nmap <buffer> ^ <Plug>(vimshell_move_head)
-  nmap <buffer> <C-c> <Plug>(vimshell_interrupt) 
-  "nmap <buffer> <C-l> <Plug>(vimshell_clear)
-  nmap  <buffer> <C-z> <Plug>(vimshell_execute_by_background)
-  imap  <buffer> <CR> <Plug>(vimshell_enter)
-  imap <expr> <buffer> <C-l> pumvisible() ? "\<C-n>" : "\<Plug>(vimshell_history_neocomplete)"
-  imap <buffer> <TAB> <Plug>(vimshell_command_complete)
-  imap <buffer> <C-a> <Plug>(vimshell_move_head)
-  imap <buffer> <C-u> <Plug>(vimshell_delete_backward_line)
-  imap <buffer> <C-w> <Plug>(vimshell_delete_backward_word)
-  imap <buffer> <C-t> <Plug>(vimshell_insert_last_word)
-  imap <buffer> <C-x><C-h> <Plug>(vimshell_run_help)
-  imap <buffer> <C-c> <Plug>(vimshell_interrupt)
-  imap <buffer> <C-h> <Plug>(vimshell_delete_backward_char)
-  imap <buffer> <BS> <Plug>(vimshell_delete_backward_char)
-  imap <buffer> <C-k> <Plug>(vimshell_delete_forward_line)
-  imap <buffer> <C-x> <Plug>(vimshell_move_previous_window)
-endfunction
-
-nnoremap <Leader>e :VimFilerExplorer  -split -no-quit -auto-cd<CR>
-" ^^ to go up
-nmap <buffer> ^^ <Plug>(vimfiler_switch_to_parent_directory)
-" use R to refresh
-nmap <buffer> R <Plug>(vimfiler_redraw_screen)
-" overwrite C-l
-nmap <buffer> <C-l> <C-w>l
-" close vimfiler automatically when there are only vimfiler open
-let g:vimfiler_as_default_explorer = 1
-let g:vimfiler_enable_auto_cd = 1
-
-
-" .pycで終わるファイルを不可視パターンに
-" 2013-08-14 追記
-let g:vimfiler_ignore_pattern = "\%(\.pyc$\)"
-
-" vimfiler specific key mappings
-
 
 " カラースキーム
-"デフォルトのカラースキーマ
 set background=dark
-let g:solarized_contrast="hight"
-let g:solarized_italic=0
-let g:solarized_termcolors=256
-let g:solarized_termtrans=1
 
+"デフォルトのカラースキーマ
 if dein#tap('vim-colors-solarized')
     colorscheme solarized
     set t_Co=256
