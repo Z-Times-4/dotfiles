@@ -718,9 +718,11 @@ if dein#tap('vim-colors-solarized')
     colorscheme solarized
     set t_Co=256
   endif
-"}}}
-"
-"
+" }}}
+
+
+
+
 " pluginを使用可能にする
 filetype plugin indent on
 
