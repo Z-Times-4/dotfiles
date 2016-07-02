@@ -218,7 +218,7 @@ repo = 'hotwatermorning/auto-git-diff'
 [[plugins]]
 repo = 'simeji/winresizer'
 hook_add = """
-let g:winresizer_start_key='<C-S-E>'
+let g:winresizer_start_key='<Leader><C-E>'
 """
 
 # neosnippetと連携
