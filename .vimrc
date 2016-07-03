@@ -4,7 +4,13 @@ augroup MyAutoCmd
 augroup END
 
 set fileencodings=utf-8,iso-2022-jp,cp932,sjis,euc-jp
-set encoding=utf-8
+
+" nvimは起動後encoding変更出来ないため(あとデフォルトでnvimなため)
+if !has('nvim')
+  set encoding=utf-8
+else
+    let $NVIM_TUI_ENABLE_TRUE_COLOR=1
+endif
 set nocompatible
 scriptencoding utf-8
 " scriptencodingと、このファイルのエンコーディングが一致するよう注意！
