@@ -640,18 +640,18 @@ augroup file_loading
 
   "ファイル読み込み時にタブのディレクトリを移動
   au BufEnter * execute ":lcd " . substitute((isdirectory(expand("%:p:h")) ? expand("%:p:h") : "")," ","\\\\ ","g")
-  au BufEnter * execute 'lcd ' fnameescape(expand('%:p:h'))
+  au BufEnter * execute 'lcd ' isdirectory(expand("%:p:h")) ? fnameescape(expand('%:p:h')) : ""
 
   "バッファ読み込み時にシンボリックリンクなら元ファイルのパスを設定
   if has("mac")
-    au BufEnter * if findfile(expand('%')) != "" && resolve(expand('%:p')) != getcwd().'/'.expand('%') | execute ':FollowSymlink' | endif
+    au BufEnter * if isdirectory(expand("%:p:h")) && findfile(expand('%')) != "" && resolve(expand('%:p')) != getcwd().'/'.expand('%') | execute ':FollowSymlink' | endif
   elseif has("unix")
     "findfileで元ファイルが辿られる+expand("%")でもフルパスが出るため場合分け
-    au BufEnter * if resolve(expand('%:p:h')) != getcwd() | execute ':FollowSymlink' | endif
+    au BufEnter * if isdirectory(expand("%:p:h")) && resolve(expand('%:p:h')) != getcwd() | execute ':FollowSymlink' | endif
   elseif has("win32") || has("win64")
     "windowsは更にややこしいので場合分け(FollowSymlinkコマンドで分岐している)
     " バッファでなくsymlinkがディレクトリに含まれている
-    au BufEnter * if findfile(expand('%')) != "" && stridx(s:GetSymlinkPath(), expand("%")) != -1 | execute ":FollowSymlink" | endif
+    au BufEnter * if isdirectory(expand("%:p:h")) && findfile(expand('%')) != "" && stridx(s:GetSymlinkPath(), expand("%")) != -1 | execute ":FollowSymlink" | endif
   endif
 
 augroup end
