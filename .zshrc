@@ -218,4 +218,5 @@ alias grep="grep $GREP_OPTIONS"
 alias ctags='/usr/local/Cellar/ctags/5.8_1/bin/ctags'
 
 [ -s "/Users/z_times_4/.dnx/dnvm/dnvm.sh" ] && . "/Users/z_times_4/.dnx/dnvm/dnvm.sh" # Load dnvm
-xkbcomp -I$HOME/.xkb ~/.xkb/keymap/mykbd $DISPLAY 2> /dev/null
+
+.  /etc/profile.d/keymap.sh
