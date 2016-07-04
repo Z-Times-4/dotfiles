@@ -2,6 +2,15 @@
 repo = 'Shougo/dein.vim'
 
 [[plugins]]
+repo = 'Shougo/deoplete.nvim'
+depends = 'context_filetype.vim'
+if = "has('nvim')"
+on_i = 1
+hook_source = '''
+  let g:deoplete#enable_at_startup = 1
+'''
+
+[[plugins]]
 repo = 'Shougo/vimfiler.vim'
 hook_add = """
 autocmd FileType vimfiler nmap <buffer> <C-l> <C-w>l
@@ -316,3 +325,5 @@ repo =  'tomasr/molokai'
 repo = 'ujihisa/unite-colorscheme'
 
 # }}}
+
+
