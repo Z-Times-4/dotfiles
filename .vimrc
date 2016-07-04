@@ -9,7 +9,7 @@ set fileencodings=utf-8,iso-2022-jp,cp932,sjis,euc-jp
 if !has('nvim')
   set encoding=utf-8
 else
-    let $NVIM_TUI_ENABLE_TRUE_COLOR=1
+  let $NVIM_TUI_ENABLE_TRUE_COLOR=1
 endif
 set nocompatible
 scriptencoding utf-8
@@ -722,7 +722,9 @@ set background=dark
 "デフォルトのカラースキーマ
 if dein#tap('vim-colors-solarized')
     colorscheme solarized
-    set t_Co=256
+    if !has('nvim')
+      set t_Co=256
+    endif
   endif
 " }}}
 
@@ -731,5 +733,6 @@ if dein#tap('vim-colors-solarized')
 
 " pluginを使用可能にする
 filetype plugin indent on
+syntax on
 
 
