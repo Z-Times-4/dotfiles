@@ -6,7 +6,8 @@ repo = 'Shougo/deoplete.nvim'
 depends = 'context_filetype.vim'
 if = "has('nvim')"
 on_i = 1
-hook_source = '''
+# deoplete hook_add{{{
+hook_add = '''
 let g:deoplete#enable_at_startup = 1
 
 " <CR>: close popup and save indent.
@@ -84,6 +85,7 @@ let g:deoplete#enable_camel_case = 1
 
 let g:deoplete#ignore_sources = {'_': ['tag']}
 '''
+# }}}
 
 [[plugins]]
 repo = 'Shougo/vimfiler.vim'
