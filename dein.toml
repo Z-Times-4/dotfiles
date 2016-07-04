@@ -65,43 +65,60 @@ repo = 'Shougo/vimshell.vim'
 hook_add = """
   nmap <Leader>v :sp<cr><c-w><c-w>:VimShell<cr>
   nmap <Leader>V :vs<cr><c-l><c-l>:VimShell<cr>
-
   let g:vimshell_no_default_keymappings = 1
-  let g:vimshell_prompt_expr = 'getcwd()." > "'
-  let g:vimshell_prompt_pattern = '^\f\+ > '
-  " overwrite C-l
-  nmap  <buffer> <CR> <Plug>(vimshell_enter)
-  nmap <buffer> q <Plug>(vimshell_hide)
-  nmap <buffer> Q <Plug>(vimshell_exit)
-  nmap <buffer> <C-p> <Plug>(vimshell_previous_prompt)
-  nmap <buffer> <C-n> <Plug>(vimshell_next_prompt)
-  nmap <buffer> <C-S-k> <Plug>(vimshell_delete_previous_output)
-  nmap <buffer> <C-k> <C-w>k
-  nmap <buffer> <C-y> <Plug>(vimshell_paste_prompt)
-  nmap <buffer> E <Plug>(vimshell_move_end_argument)
-  nmap <buffer> cc <Plug>(vimshell_change_line)
-  nmap <buffer> dd <Plug>(vimshell_delete_line)
-  nmap <buffer> I <Plug>(vimshell_insert_head)
-  nmap <buffer> A <Plug>(vimshell_append_end)
-  nmap <buffer> i <Plug>(limshell_insert_enter)
-  nmap <buffer> a <Plug>(vimshell_append_enter)
-  nmap <buffer> ^ <Plug>(vimshell_move_head)
-  nmap <buffer> <C-c> <Plug>(vimshell_interrupt) 
-  "nmap <buffer> <C-l> <Plug>(vimshell_clear)
-  nmap  <buffer> <C-z> <Plug>(vimshell_execute_by_background)
-  imap  <buffer> <CR> <Plug>(vimshell_enter)
-  imap <expr> <buffer> <C-l> pumvisible() ? "\<C-n>" : "\<Plug>(vimshell_history_neocomplete)"
-  imap <buffer> <TAB> <Plug>(vimshell_command_complete)
-  imap <buffer> <C-a> <Plug>(vimshell_move_head)
-  imap <buffer> <C-u> <Plug>(vimshell_delete_backward_line)
-  imap <buffer> <C-w> <Plug>(vimshell_delete_backward_word)
-  imap <buffer> <C-t> <Plug>(vimshell_insert_last_word)
-  imap <buffer> <C-x><C-h> <Plug>(vimshell_run_help)
-  imap <buffer> <C-c> <Plug>(vimshell_interrupt)
-  imap <buffer> <C-h> <Plug>(vimshell_delete_backward_char)
-  imap <buffer> <BS> <Plug>(vimshell_delete_backward_char)
-  imap <buffer> <C-k> <Plug>(vimshell_delete_forward_line)
-  imap <buffer> <C-x> <Plug>(vimshell_move_previous_window)
+ 
+let g:vimshell_user_prompt = 'fnamemodify(getcwd(), ":~")'
+let g:vimshell_prompt = '% '
+let g:vimshell_split_command = ''
+let g:vimshell_enable_transient_user_prompt = 1
+let g:vimshell_force_overwrite_statusline = 1
+
+
+" nvimだと動かない
+"  let g:vimshell_prompt_expr = 'escape(fnamemodify(getcwd(), ":~").">", "\\[]()?! ")." "'
+"  let g:vimshell_prompt_pattern = '^\%(\f\|\\.\)\+> '
+
+  au! FileType vimshell call s:set_vimshell() 
+
+  function! s:set_vimshell()
+    " overwrite C-l
+    nmap <buffer> <CR> <Plug>(vimshell_enter)
+    nmap <buffer> q <Plug>(vimshell_hide)
+    nmap <buffer> Q <Plug>(vimshell_exit)
+    nmap <buffer> <C-p> <Plug>(vimshell_previous_prompt)
+    nmap <buffer> <C-n> <Plug>(vimshell_next_prompt)
+    nmap <buffer> <C-S-k> <Plug>(vimshell_delete_previous_output)
+    nmap <buffer> <C-k> <C-w>k
+    nmap <buffer> <C-y> <Plug>(vimshell_paste_prompt)
+    nmap <buffer> E <Plug>(vimshell_move_end_argument)
+    nmap <buffer> cc <Plug>(vimshell_change_line)
+    nmap <buffer> dd <Plug>(vimshell_delete_line)
+    nmap <buffer> I <Plug>(vimshell_insert_head)
+    nmap <buffer> A <Plug>(vimshell_append_end)
+    nmap <buffer> i <Plug>(limshell_insert_enter)
+    nmap <buffer> a <Plug>(vimshell_append_enter)
+    nmap <buffer> ^ <Plug>(vimshell_move_head)
+    nmap <buffer> <C-c> <Plug>(vimshell_interrupt) 
+    "nmap <buffer> <C-l> <Plug>(vimshell_clear)
+    nmap  <buffer> <C-z> <Plug>(vimshell_execute_by_background)
+    imap  <buffer> <CR> <Plug>(vimshell_enter)
+    imap <expr> <buffer> <C-l> pumvisible() ? "\<C-n>" : "\<Plug>(vimshell_history_neocomplete)"
+    imap <buffer> <TAB> <Plug>(vimshell_command_complete)
+    imap <buffer> <C-a> <Plug>(vimshell_move_head)
+    imap <buffer> <C-u> <Plug>(vimshell_delete_backward_line)
+    imap <buffer> <C-w> <Plug>(vimshell_delete_backward_word)
+    imap <buffer> <C-t> <Plug>(vimshell_insert_last_word)
+    imap <buffer> <C-x><C-h> <Plug>(vimshell_run_help)
+    imap <buffer> <C-c> <Plug>(vimshell_interrupt)
+
+    imap <buffer><BS>  <Plug>(vimshell_another_delete_backward_char)
+    imap <buffer><C-h> <Plug>(vimshell_another_delete_backward_char)
+
+    "imap <buffer> <C-h> <Plug>(vimshell_delete_backward_char)
+    "imap <buffer> <BS> <Plug>(vimshell_delete_backward_char)
+    imap <buffer> <C-k> <Plug>(vimshell_delete_forward_line)
+    imap <buffer> <C-x> <Plug>(vimshell_move_previous_window)
+  endfunction!
 """
 #}}}
 
