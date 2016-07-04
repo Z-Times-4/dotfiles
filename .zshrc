@@ -196,7 +196,7 @@ case "$(uname)" in
 
     Darwin) # OSがMacならば
       export ZSH=/Users/z_times_4/.oh-my-zsh
-      export XDG_CONFIG_PATH=~/.config
+      export XDG_CONFIG_HOME=~/.config
       export PATH="/Users/z_times_4/.local/bin:/Users/z_times_4/.nodebrew/current/bin:/Users/z_times_4/.nodebrew/current/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin/opt/homebrew-cask/Caskroom:$PATH"
       export PATH=$HOME/.nodebrew/current/bin:$PATH
       if [[ -d /Applications/MacVim.app ]]; then # MacVimが存在するならば
