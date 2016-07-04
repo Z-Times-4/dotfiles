@@ -28,12 +28,16 @@ scriptencoding utf-8
 " Windows, unixでのruntimepathの違いを吸収するためのもの。
 " $MY_VIMRUNTIMEはユーザーランタイムディレクトリを示す。
 " :echo $MY_VIMRUNTIMEで実際のパスを確認できます。
-if isdirectory($HOME . '/.vim')
-  let $MY_VIMRUNTIME = $HOME.'/.vim'
-elseif isdirectory($HOME . '\vimfiles')
-  let $MY_VIMRUNTIME = $HOME.'\vimfiles'
-elseif isdirectory($VIM . '\vimfiles')
-  let $MY_VIMRUNTIME = $VIM.'\vimfiles'
+if has('nvim')
+  let $MY_VIMRUNTIME = $XDG_CONFIG_HOME . '/nvim'
+else
+  if isdirectory($HOME . '/.vim')
+    let $MY_VIMRUNTIME = $HOME.'/.vim'
+  elseif isdirectory($HOME . '\vimfiles')
+    let $MY_VIMRUNTIME = $HOME.'\vimfiles'
+  elseif isdirectory($VIM . '\vimfiles')
+    let $MY_VIMRUNTIME = $VIM.'\vimfiles'
+  endif
 endif
 
 if has('win32')
