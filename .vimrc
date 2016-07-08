@@ -638,7 +638,7 @@ augroup file_loading
   autocmd BufNew,BufNewFile,BufRead,BufEnter,VimEnter .vimrc set syntax=vim
   autocmd BufNewFile,BufRead,BufEnter *.vim set filetype=vim
   autocmd BufNewFile,BufRead,BufEnter *.vim set syntax=vim
-  autocmd BufNewFile,BufRead,BufEnter .toml set syntax=toml
+  autocmd BufNewFile,BufRead,BufEnter *.toml set syntax=toml
   autocmd BufNewFile,BufRead,BufEnter *.hs set filetype=haskell
   autocmd BufNewFile,BufRead,BufEnter *.yml set filetype=yaml
 
