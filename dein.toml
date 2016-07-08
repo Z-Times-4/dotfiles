@@ -314,8 +314,8 @@ repo = 'tpope/vim-fugitive'
 repo = 'hotwatermorning/auto-git-diff'
 
 # tagsからアウトライン表示
-#[[plugins]]
-#repo = 'majutsushi/tagbar'
+[[plugins]]
+repo = 'majutsushi/tagbar'
 
 # windowリサイズ
 [[plugins]]
