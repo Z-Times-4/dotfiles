@@ -207,6 +207,7 @@ case "$(uname)" in
     Linux) # Linuxならば
       export ZSH=~/.oh-my-zsh
       export PATH=$HOME/local/bin:$HOME/.local/bin:/usr/bin:/bin:/usr/sbin:/sbin:$PATH
+      . /etc/profile.d/keymap.sh
       ;;
 
     *) ;; # OSがMac以外ならば何もしない
@@ -225,4 +226,3 @@ alias ctags='/usr/local/Cellar/ctags/5.8_1/bin/ctags'
 
 [ -s "/Users/z_times_4/.dnx/dnvm/dnvm.sh" ] && . "/Users/z_times_4/.dnx/dnvm/dnvm.sh" # Load dnvm
 
-.  /etc/profile.d/keymap.sh
