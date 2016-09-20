@@ -91,7 +91,7 @@ set noswapfile
 " viminfoを作成しない
 
 " クリップボードを共有
-if has('nvim)
+if has('nvim')
   set clipboard=unnamedplus
 elseif has('unnamedplus')
   set clipboard+=unnamedplus,unnamed 
