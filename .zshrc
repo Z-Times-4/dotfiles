@@ -206,6 +206,7 @@ case "$(uname)" in
       ;;
     Linux) # Linuxならば
       export ZSH=~/.oh-my-zsh
+      export XDG_CONFIG_HOME=~/.config
       export PATH=$HOME/local/bin:$HOME/.local/bin:/usr/bin:/bin:/usr/sbin:/sbin:$PATH
       . /etc/profile.d/keymap.sh
       ;;
