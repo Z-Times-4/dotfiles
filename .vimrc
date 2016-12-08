@@ -268,7 +268,7 @@ function! s:SwitchToActualFile()
   let l:bufname = bufname('%')
   enew
   exec 'bw '. l:bufname
-  exec "e " . fname
+  exec "e " . l:fname
   call setpos('.', pos)
 endfunction
 
@@ -285,12 +285,12 @@ function! s:SwitchToActualFileForWindows()
 endfunction
 
 function! s:GetSymlinkPath()
-  let s:bufname = expand('%')
-  let s:fnamebase = system("dir | grep " . s:bufname  . "| grep -o \\\[.*\\\]")
-  let s:parse_first = stridx(s:fnamebase, "[") +1
-  let s:parse_last = strridx(s:fnamebase, "]") -1
-  let s:fname = s:fnamebase[s:parse_first:s:parse_last]
-  return s:fname
+  let bufname = expand('%')
+  let fnamebase = system("dir | grep " . bufname  . "| grep -o \\\[.*\\\]")
+  let parse_first = stridx(fnamebase, "[") +1
+  let parse_last = strridx(fnamebase, "]") -1
+  let fname = fnamebase[parse_first : parse_last]
+  return fname
 endfunction
 
 
