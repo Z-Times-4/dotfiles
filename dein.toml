@@ -150,15 +150,6 @@ let g:vimshell_split_command = ''
 let g:vimshell_enable_transient_user_prompt = 1
 let g:vimshell_force_overwrite_statusline = 1
 
-" winでコマンドを実行する場合の文字コード
-if has('win32') || has('win64')
-  let g:vimshell_interactive_encodings = {
-  \ '/msys/1.0/bin/':'cp932',
-  \ '/MinGW64/bin/':'cp932',
-  \ '/system32/':'cp932',
-  \ '/Git/bin/':'cp932',
-  \}
-endif
 
 " nvimだと動かない
 "  let g:vimshell_prompt_expr = 'escape(fnamemodify(getcwd(), ":~").">", "\\[]()?! ")." "'
@@ -399,6 +390,12 @@ repo = 'koron/codic-vim'
 
 [[plugins]]
 repo = 'rhysd/unite-codic.vim'
+
+[[plugins]]
+repo = 'elmcast/elm-vim'
+hook_add='''
+let g:elm_format_autosave = 1
+'''
 
 # カラースキーマ定義{{{
 # solarized カラースキーム
