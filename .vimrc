@@ -667,9 +667,9 @@ augroup end
 
 "dein.vim設定 {{{
 " プラグインが実際にインストールされるディレクトリ
-let s:dein_dir = $MY_VIMRUNTIME . '/bundle'
+let g:dein_dir = $MY_VIMRUNTIME . '/bundle'
 " dein.vim 本体
-let s:dein_repo_dir = s:dein_dir . '/repos/github.com/Shougo/dein.vim'
+let s:dein_repo_dir = g:dein_dir . '/repos/github.com/Shougo/dein.vim'
 "タイムアウト値
 let g:dein#install_process_timeout=3600
 "同時ダウンロードプロセス
@@ -684,13 +684,13 @@ if &runtimepath !~# '/dein.vim'
 endif
 
 " 設定開始
-if dein#load_state(s:dein_dir)
+if dein#load_state(g:dein_dir)
 
   " プラグインリストを収めた TOML ファイル
   let s:toml      = g:rc_dir . '/dein.toml'
   let s:lazy_toml = g:rc_dir . '/dein_lazy.toml'
 
-  call dein#begin(s:dein_dir, [$MYVIMRC, s:toml, s:lazy_toml])
+  call dein#begin(g:dein_dir, [$MYVIMRC, s:toml, s:lazy_toml])
 
   " TOML を読み込み、キャッシュしておく
   call dein#load_toml(s:toml,      {'lazy': 0})
