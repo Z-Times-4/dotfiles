@@ -385,6 +385,17 @@ repo = 'zchee/deoplete-go'
 on_i = 1
 on_ft = 'go'
 
+# elm用
+[[plugins]]
+repo = 'lambdatoast/elm.vim'
+on_ft='elm'
+hook_add = """
+nnoremap <leader>le :ElmEvalLine<CR>
+vnoremap <leader>ls :<C-u>ElmEvalSelection<CR>
+nnoremap <leader>lm :ElmMakeCurrentFile<CR>
+au! BufWritePost *.elm ElmMakeCurrentFile
+"""
+
 
 # カラースキーマ定義{{{
 # solarized カラースキーム
