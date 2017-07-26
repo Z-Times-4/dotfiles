@@ -67,11 +67,12 @@ hook_add = '''
 '''
 
 # Tomlシンタックス
-[[plugins]]
-repo = 'cespare/vim-toml'
-on_ft = 'toml'
+ [[plugins]]
+ repo = 'cespare/vim-toml'
+ on_ft = 'toml'
 
 # go{{{
+[[plugins]]
 repo = 'fatih/vim-go'
 on_ft = 'go'
 # }}}
