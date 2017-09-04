@@ -90,9 +90,10 @@ endif
 set noswapfile
 " viminfoを作成しない
 
-set clipboard=
 " クリップボードを共有
-if has('unnamedplus')
+if has('nvim')
+  set clipboard=unnamedplus
+elseif has('unnamedplus')
   set clipboard+=unnamedplus,unnamed 
 else
   set clipboard+=unnamed
@@ -267,7 +268,7 @@ function! s:SwitchToActualFile()
   let l:bufname = bufname('%')
   enew
   exec 'bw '. l:bufname
-  exec "e " . fname
+  exec "e " . l:fname
   call setpos('.', pos)
 endfunction
 
@@ -284,12 +285,12 @@ function! s:SwitchToActualFileForWindows()
 endfunction
 
 function! s:GetSymlinkPath()
-  let s:bufname = expand('%')
-  let s:fnamebase = system("dir | grep " . s:bufname  . "| grep -o \\\[.*\\\]")
-  let s:parse_first = stridx(s:fnamebase, "[") +1
-  let s:parse_last = strridx(s:fnamebase, "]") -1
-  let s:fname = s:fnamebase[s:parse_first:s:parse_last]
-  return s:fname
+  let bufname = expand('%')
+  let fnamebase = system("dir | grep " . bufname  . "| grep -o \\\[.*\\\]")
+  let parse_first = stridx(fnamebase, "[") +1
+  let parse_last = strridx(fnamebase, "]") -1
+  let fname = fnamebase[parse_first : parse_last]
+  return fname
 endfunction
 
 
@@ -638,7 +639,8 @@ augroup file_loading
   autocmd BufNew,BufNewFile,BufRead,BufEnter,VimEnter .vimrc set syntax=vim
   autocmd BufNewFile,BufRead,BufEnter *.vim set filetype=vim
   autocmd BufNewFile,BufRead,BufEnter *.vim set syntax=vim
-  autocmd BufNewFile,BufRead,BufEnter .toml set syntax=toml
+  autocmd BufNewFile,BufRead,BufEnter *.toml set syntax=toml
+  autocmd BufNewFile,BufRead,BufEnter *.toml set filetype=toml
   autocmd BufNewFile,BufRead,BufEnter *.hs set filetype=haskell
   autocmd BufNewFile,BufRead,BufEnter *.yml set filetype=yaml
 
@@ -666,9 +668,9 @@ augroup end
 
 "dein.vim設定 {{{
 " プラグインが実際にインストールされるディレクトリ
-let s:dein_dir = $MY_VIMRUNTIME . '/bundle'
+let g:dein_dir = $MY_VIMRUNTIME . '/bundle'
 " dein.vim 本体
-let s:dein_repo_dir = s:dein_dir . '/repos/github.com/Shougo/dein.vim'
+let s:dein_repo_dir = g:dein_dir . '/repos/github.com/Shougo/dein.vim'
 "タイムアウト値
 let g:dein#install_process_timeout=3600
 "同時ダウンロードプロセス
@@ -683,13 +685,13 @@ if &runtimepath !~# '/dein.vim'
 endif
 
 " 設定開始
-if dein#load_state(s:dein_dir)
+if dein#load_state(g:dein_dir)
 
   " プラグインリストを収めた TOML ファイル
   let s:toml      = g:rc_dir . '/dein.toml'
   let s:lazy_toml = g:rc_dir . '/dein_lazy.toml'
 
-  call dein#begin(s:dein_dir, [$MYVIMRC, s:toml, s:lazy_toml])
+  call dein#begin(g:dein_dir, [$MYVIMRC, s:toml, s:lazy_toml])
 
   " TOML を読み込み、キャッシュしておく
   call dein#load_toml(s:toml,      {'lazy': 0})

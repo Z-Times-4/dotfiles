@@ -84,12 +84,21 @@ let g:deoplete#enable_camel_case = 1
 
 
 let g:deoplete#ignore_sources = {'_': ['tag']}
+
+let g:deoplete#omni#functions = {}
+let g:deoplete#omni#sources = {}
+let g:deoplete#omni#sources._ = ['file', 'neosnippet']
+let g:deoplete#omni#input_patterns = {}
+
+let g:deoplete#omni#functions.elm = ['elm#Complete']
+let g:deoplete#omni#input_patterns.elm = '[^ \t]+'
 '''
 # }}}
 
 [[plugins]]
 repo = 'Shougo/vimfiler.vim'
 hook_add = """
+" vimfile_hook_add{{{
 autocmd FileType vimfiler nmap <buffer> <C-l> <C-w>l
 nnoremap <Leader>e :VimFilerExplorer  -split -no-quit -auto-cd<CR>
 " ^^ to go up
@@ -132,13 +141,11 @@ unlet diff_action
 " 不可視パターン
 let g:vimfiler_ignore_pattern = '\(^\.\|\~$\|\.git$\|\.hi$\|\.pyc$\|\.[oad]$\)'
 """
-# depends = 'Shougo/unite.vim'
-# on_map = [['n', '<Plug>']]
-# on_if =  'isdirectory(bufname("%"))'
+" /vimfile_hook_add}}}
 
-# vimshell{{{
 [[plugins]]
 repo = 'Shougo/vimshell.vim'
+# vimshell{{{
 hook_add = """
   nmap <Leader>v :sp<cr><c-w><c-w>:VimShell<cr>
   nmap <Leader>V :vs<cr><c-l><c-l>:VimShell<cr>
@@ -314,8 +321,8 @@ repo = 'tpope/vim-fugitive'
 repo = 'hotwatermorning/auto-git-diff'
 
 # tagsからアウトライン表示
-#[[plugins]]
-#repo = 'majutsushi/tagbar'
+[[plugins]]
+repo = 'majutsushi/tagbar'
 
 # windowリサイズ
 [[plugins]]
@@ -395,6 +402,20 @@ vnoremap <leader>ls :<C-u>ElmEvalSelection<CR>
 nnoremap <leader>lm :ElmMakeCurrentFile<CR>
 au! BufWritePost *.elm ElmMakeCurrentFile
 """
+
+[[plugins]]
+repo = 'koron/codic-vim'
+
+[[plugins]]
+repo = 'rhysd/unite-codic.vim'
+
+# シンタックスチェック
+# TODO 各種言語プラグインに適用させる
+[[plugins]]
+repo = 'neomake/neomake'
+hook_add = '''
+  autocmd! BufReadPost,BufWritePost * Neomake
+'''
 
 
 # カラースキーマ定義{{{

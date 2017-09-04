@@ -13,7 +13,9 @@ repo = 'Shougo/neosnippet.vim'
 depends = ['neosnippet-snippets', 'context_filetype.vim']
 on_event = 'InsertCharPre'
 on_ft = 'snippet'
-hook_source = 'source ~/.vim/rc/plugins/neosnippet.rc.vim'
+hook_source = '''
+source ~/.vim/rc/plugins/neosnippet.rc.vim
+'''
 
 # ファイルのアウトライン表示
 [[plugins]]
@@ -74,6 +76,14 @@ hook_add = '''
 # go{{{
 [[plugins]]
 repo = 'fatih/vim-go'
+hook_add = '''
+  let g:go_highlight_functions = 1
+  let g:go_highlight_methods = 1
+  let g:go_highlight_structs = 1
+  let g:neocomplete#sources#omni#input_patterns.go = '\h\w\.\w*'
+  set nossl
+
+'''
 on_ft = 'go'
 # }}}
 
@@ -114,3 +124,35 @@ repo =  'glittershark/vim-hare'
 on_ft = 'haskell'
 
 # haskell}}}
+
+#elm用config{{{
+
+[[plugins]]
+repo = 'elmcast/elm-vim'
+on_ft="elm"
+hook_source='''
+
+" neomake用
+let g:elm_format_autosave = 1
+" define elm-make maker
+let g:neomake_elm_elmmake_maker = {
+  \ 'exe': 'elm-make',
+  \ 'buffer_output': 1,
+  \ 'errorformat':
+    \ '%E%.%#--\ %m\ -%# %f' . ',' .
+    \ '%C%l\\|' . ',' .
+    \ '%C%.%#'
+\ }
+
+" enable elm-make on elm
+let g:neomake_elm_enabled_makers = [ 'elmmake' ]
+
+'''
+
+[[plugin]]
+repo = 'shime/vim-livedown'
+on_ft = ['md','markdown']
+on_i = 0
+
+
+#}}}
