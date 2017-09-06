@@ -570,6 +570,7 @@ endif
 
 if has('unix')
   set guicursor=
+endif
 
 " if has('unix') && !has('gui_running')
 "   " ESCですぐに反映されない対策
