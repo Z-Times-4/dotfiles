@@ -567,6 +567,10 @@ if has('syntax')
     autocmd InsertLeave * call s:StatusLine('Leave')
   augroup END
 endif
+
+if has('unix')
+  set guicursor=
+
 " if has('unix') && !has('gui_running')
 "   " ESCですぐに反映されない対策
 "   inoremap <silent> <ESC> <ESC>
