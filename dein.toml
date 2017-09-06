@@ -141,7 +141,7 @@ unlet diff_action
 " 不可視パターン
 let g:vimfiler_ignore_pattern = '\(^\.\|\~$\|\.git$\|\.hi$\|\.pyc$\|\.[oad]$\)'
 """
-" /vimfile_hook_add}}}
+# /vimfile_hook_add}}}
 
 [[plugins]]
 repo = 'Shougo/vimshell.vim'
