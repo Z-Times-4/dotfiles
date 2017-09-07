@@ -186,7 +186,9 @@ fi
 
 export GOPATH=$HOME/go
 export PATH=$PATH:$GOPATH/bin
-eval "$(direnv hook zsh)"
+
+# 環境変数をdirごとに設定 今はとりあえず使わない
+# eval "$(direnv hook zsh)"
 
 
 ## デフォルトエディタ設定
