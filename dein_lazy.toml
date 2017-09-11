@@ -73,7 +73,7 @@ hook_add = '''
  repo = 'cespare/vim-toml'
  on_ft = 'toml'
 
-# go{{{
+# golang{{{
 [[plugins]]
 repo = 'fatih/vim-go'
 hook_add = '''
@@ -82,6 +82,7 @@ hook_add = '''
   let g:go_highlight_structs = 1
   " let g:neocomplete#sources#omni#input_patterns.go = '\h\w\.\w*'
   set nossl
+  let g:go_term_mode="below 10split"
 
 '''
 on_ft = 'go'
