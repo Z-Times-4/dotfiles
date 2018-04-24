@@ -69,12 +69,22 @@ hook_add = '''
 '''
 
 # Tomlシンタックス
-[[plugins]]
-repo = 'cespare/vim-toml'
-on_ft = 'toml'
+ [[plugins]]
+ repo = 'cespare/vim-toml'
+ on_ft = 'toml'
 
-# go{{{
+# golang{{{
+[[plugins]]
 repo = 'fatih/vim-go'
+hook_add = '''
+  let g:go_highlight_functions = 1
+  let g:go_highlight_methods = 1
+  let g:go_highlight_structs = 1
+  " let g:neocomplete#sources#omni#input_patterns.go = '\h\w\.\w*'
+  set nossl
+  let g:go_term_mode="below 10split"
+
+'''
 on_ft = 'go'
 # }}}
 
@@ -139,5 +149,11 @@ let g:neomake_elm_elmmake_maker = {
 let g:neomake_elm_enabled_makers = [ 'elmmake' ]
 
 '''
+
+[[plugin]]
+repo = 'shime/vim-livedown'
+on_ft = ['md','markdown']
+on_i = 0
+
 
 #}}}
