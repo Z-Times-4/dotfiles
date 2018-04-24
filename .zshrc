@@ -184,9 +184,9 @@ fi
 
 ## go関連
 
-export GOPATH=$HOME/go
-export PATH=$PATH:$GOPATH/bin
-eval "$(direnv hook zsh)"
+
+# 環境変数をdirごとに設定 今はとりあえず使わない
+# eval "$(direnv hook zsh)"
 
 
 ## デフォルトエディタ設定
@@ -195,7 +195,6 @@ EDITOR=/Applications/MacVim.app/Contents/MacOS/Vim
 case "$(uname)" in
 
     Darwin) # OSがMacならば
-      export ZSH=/Users/z_times_4/.oh-my-zsh
       export XDG_CONFIG_HOME=~/.config
       export PATH="/Users/z_times_4/.local/bin:/Users/z_times_4/.nodebrew/current/bin:/Users/z_times_4/.nodebrew/current/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin/opt/homebrew-cask/Caskroom:$PATH"
       export PATH=$HOME/.nodebrew/current/bin:$PATH
@@ -205,21 +204,12 @@ case "$(uname)" in
       fi
       ;;
     Linux) # Linuxならば
-      export ZSH=~/.oh-my-zsh
       export XDG_CONFIG_HOME=~/.config
       export PATH=$HOME/local/bin:$HOME/.local/bin:/usr/bin:/bin:/usr/sbin:/sbin:$PATH
-      . /etc/profile.d/keymap.sh
       ;;
 
     *) ;; # OSがMac以外ならば何もしない
 esac
-
-## oh-my-zsh設定
-plugins=(git ruby osx bundler brew rails emoji-clock)
-ZSH_THEME="wedisagree"
-source $ZSH/oh-my-zsh.sh
-GREP_OPTIONS='--binary-files=without-match'
-alias grep="grep $GREP_OPTIONS"
 
 
 ##alias設定

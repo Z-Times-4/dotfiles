@@ -567,6 +567,11 @@ if has('syntax')
     autocmd InsertLeave * call s:StatusLine('Leave')
   augroup END
 endif
+
+if has('unix')
+  set guicursor=
+endif
+
 " if has('unix') && !has('gui_running')
 "   " ESCですぐに反映されない対策
 "   inoremap <silent> <ESC> <ESC>
@@ -640,6 +645,7 @@ augroup file_loading
   autocmd BufNewFile,BufRead,BufEnter *.vim set filetype=vim
   autocmd BufNewFile,BufRead,BufEnter *.vim set syntax=vim
   autocmd BufNewFile,BufRead,BufEnter *.toml set syntax=toml
+  autocmd BufNewFile,BufRead,BufEnter *.toml set filetype=toml
   autocmd BufNewFile,BufRead,BufEnter *.hs set filetype=haskell
   autocmd BufNewFile,BufRead,BufEnter *.yml set filetype=yaml
 
