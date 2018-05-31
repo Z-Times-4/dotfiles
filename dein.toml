@@ -247,18 +247,7 @@ repo = 'thinca/vim-singleton'
 
 [[plugins]]
 repo = 'Shougo/vimproc.vim'
-hook_post_update = '''
-  if dein#util#_is_windows()
-    let cmd = 'tools\\update-dll-mingw'
-  elseif dein#util#_is_cygwin()
-    let cmd = 'make -f make_cygwin.mak'
-  elseif executable('gmake')
-    let cmd = 'gmake'
-  else
-    let cmd = 'make'
-  endif
-  let g:dein#plugin.build = cmd
-'''
+build='make'
 
 [[plugins]]
 repo = 'Shougo/neossh.vim'
@@ -419,6 +408,14 @@ let g:solarized_termcolors=256
 let g:solarized_termtrans=1
 """
 
+[[plugins]]
+repo = 'frankier/neovim-colors-solarized-truecolor-only'
+hook_add="""
+set termguicolors
+set background=light " or dark
+colorscheme solarized
+"""
+
 # mustang カラースキーム
 [[plugins]]
 repo =  'croaker/mustang-vim'
@@ -446,6 +443,9 @@ repo =  'therubymug/vim-pyte'
 # molokai カラースキーム
 [[plugins]]
 repo =  'tomasr/molokai'
+
+# soralizedカラースキーム(nvim版)
+repo = 'iCyMind/NeoSolarized'
 
 # カラースキーム一覧表示に Unite.vim を使う
 [[plugins]]
