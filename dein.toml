@@ -208,6 +208,9 @@ let g:vimshell_force_overwrite_statusline = 1
 #}}}
 
 [[plugins]]
+repo = 'Shougo/Denite.nvim'
+
+[[plugins]]
 repo = 'Shougo/unite.vim'
 depends = 'neomru.vim'
 # Unite{{{
